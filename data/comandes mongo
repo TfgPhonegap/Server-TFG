@@ -1,0 +1,1 @@
+mongoimport --db <nomDB> --collection <NomCollection>> --jsonArray <nom JS>
