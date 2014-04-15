@@ -5,25 +5,15 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectID;
-mongoose.connect('mongodb://localhost/tfg');
 
 var User = new Schema({
-    id      		: String
-  , name 			: {type: String, required: true, trim: true , unique: true}
+    name 			: {type: String, required: true, trim: true , unique: true}
   , description     : { type: String, required: true, trim: true }
   , avatar        	: { type: String, required: true, trim: true }
+  , ubicacions		: {type : Array , "default" : []}
 });
 
 var User = mongoose.model('User', User, 'users');
-
-/*var userSchema = {
-	id: String,
-	name: String,
-	description: String,
-	avatar: String
-};
-
-var User = mongoose.model('User', userSchema, 'users');*/
 
 exports.list = function(req, res){
 	User.find(function(err, doc){
@@ -60,10 +50,21 @@ exports.newUser = function(req, res){
 	        res.json(data);
 	    }
 	});
+};
+exports.delete = function(req, res){
 
 
-
-
-	
-  
+	User.findOne({name: req.params.userName}, function(err, doc){
+		if (doc == null) {
+			res.send(req.params.userName + " no és cap user");
+		}
+	}).remove(function(err) {
+		if(!err) {
+			console.log('Sha eliminat ' + req.param("userName"));
+			res.send('Sha eliminat ' + req.param("userName"));
+		}
+		else {
+			console.log(err);
+		}
+	});  
 };

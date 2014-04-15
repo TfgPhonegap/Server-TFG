@@ -1,0 +1,66 @@
+[
+    { name: 'Batman', description:'gotham city', avatar: 'img/avatars/batman.jpg', llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ] },
+    { name: 'Spiderman', description:'web', avatar: 'img/avatars/spiderman.jpg' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'Wolverine', description:'Not xman', avatar: 'img/avatars/wolverine.jpg' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'Captain America', description:'USA', avatar: 'img/avatars/america.jpg' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'IronMan', description:'Money', avatar: 'img/avatars/ironman.png' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'Fantastic four', description:'Lets go', avatar: 'img/avatars/4.jpg' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'Thor', description:'!!!', avatar: 'img/avatars/thor.jpg' , llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]  },
+    { name: 'Hulk', description:'Bussy', avatar: 'img/avatars/hulk.jpg', llistatUbicacions: [
+    //Canviar format data (new Object DATE).
+    {data: '01-01-2014', lloc: 'San Diego', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '02-01-2014', lloc: 'Boston', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '03-01-2014', lloc: 'Orlando', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '04-01-2014', lloc: 'Los Angeles', comentari: 'Comentari que hagi deixat l''usuari'},
+    {data: '05-01-2014', lloc: 'Detroit', comentari: 'Comentari que hagi deixat l''usuari'}   
+    ]}
+  ]

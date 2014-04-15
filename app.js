@@ -6,6 +6,7 @@
 var express = require('express')
   , http = require('http')
   , namespace = require('express-namespace')
+  , mongoose = require("mongoose")
   , path = require('path');
 
 
@@ -27,6 +28,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+mongoose.connect('mongodb://localhost/tfg');
 routes = require('./routes')(app);
 
 
