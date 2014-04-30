@@ -13,6 +13,7 @@ module.exports = function(app) {
 	});
 	app.namespace('/ubicacions', function(){
 		app.get('/:userName', ubicacions.llistaUser);
+		app.post('/nova/:userName', ubicacions.novaUbicacio);
 	});
 
 	

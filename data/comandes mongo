@@ -1,1 +1,17 @@
 mongoimport --db <nomDB> --collection <NomCollection>> --jsonArray <nom JS>
+
+// Query per retornar tots els usuaris que hagin estat a Detroit:
+	db.users.find({"ubicacions.lloc": "Detroit"})
+
+
+// Afegir element a array (Falta veure si funciona)
+var query = {"_id": id};
+var update = {name: {first: 'john', last: 'smith'}};
+var options = {new: true};
+People.findOneAndUpdate(query, update, options, function(err, person) {
+  if (err) {
+    console.log('got an error');
+  }
+
+  // at this point person is null.
+});

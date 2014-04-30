@@ -17,6 +17,8 @@ var User = mongoose.model('User', User, 'users');
 
 exports.list = function(req, res){
 	User.find(function(err, doc){
+		console.log('Enviem lo seguent');
+		console.log(doc);
 		res.send(doc);
 	});
   
