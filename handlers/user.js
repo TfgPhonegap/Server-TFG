@@ -9,8 +9,8 @@ var Schema = mongoose.Schema
 var User = new Schema({
     name 			: {type: String, required: true, trim: true , unique: true}
   , description     : { type: String, required: true, trim: true }
-  , avatar        	: { type: String, required: true, trim: true }
   , ubicacions		: {type : Array , "default" : []}
+  , accessos		: {type : Array , "default" : []}	
 });
 
 var User = mongoose.model('User', User, 'users');

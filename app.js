@@ -41,6 +41,8 @@ mongoose.connect('mongodb://localhost/tfg');
 routes = require('./routes')(app);
 
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), '0.0.0.0', function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+
