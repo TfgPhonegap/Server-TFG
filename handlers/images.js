@@ -9,6 +9,11 @@ exports.perfil = function(req, res){
   
 };
 
+exports.ubicacio = function(req, res){
+	res.sendfile('data/ubicacions/' + req.params.lloc);
+  
+};
+
 exports.novaUbicacio = function(req, res){
 	//Arreclar això, s'estan fen 2 accessos a BD quan crec que es podria fer amb un.
 	var nouLloc = req.param("lloc");

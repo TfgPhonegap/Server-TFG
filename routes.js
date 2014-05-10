@@ -23,7 +23,8 @@ module.exports = function(app) {
 		//app.post('/nova/:userName', ubicacions.novaUbicacio);
 	});
 	app.namespace('/images', function(){
-		app.get('/:userName', images.perfil);
+		app.get('/avatar/:userName', images.perfil);
+		app.get('/ubicacio/:lloc', images.ubicacio);
 	});
 
 	
