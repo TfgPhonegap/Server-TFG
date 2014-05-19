@@ -8,6 +8,7 @@ var Schema = mongoose.Schema
 
 var User = new Schema({
     name 			: {type: String, required: true, trim: true , unique: true}
+  , password		: {type: String, required: true}
   , description     : { type: String, required: true, trim: true }
   , ubicacions		: {type : Array , "default" : []}
   , accessos		: {type : Array , "default" : []}	
@@ -17,8 +18,6 @@ var User = mongoose.model('User', User, 'users');
 
 exports.list = function(req, res){
 	User.find(function(err, doc){
-		console.log('Enviem lo seguent');
-		console.log(doc);
 		res.send(doc);
 	});
   

@@ -7,7 +7,8 @@ var express = require('express')
   , http = require('http')
   , namespace = require('express-namespace')
   , mongoose = require("mongoose")
-  , path = require('path');
+  , path = require('path')
+  , passport = require('passport');
 
 
 var app = express();
@@ -22,13 +23,17 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  // required for passport
+  app.use(express.session({ secret: 'contrassenyasupersecreta' })); // session secret
+  app.use(passport.initialize());
+  app.use(passport.session()); // persistent login sessions
 });
 
 // PERMETRE CRIDES CORS
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "GET, POST","PUT");
+  res.header("Access-Control-Allow-Methods", "GET, POST","PUT" , "OPTIONS", "DELETE");
   next();
  
 });
@@ -38,7 +43,7 @@ app.configure('development', function(){
 });
 
 mongoose.connect('mongodb://localhost/tfg');
-routes = require('./routes')(app);
+routes = require('./routes')(app, passport);
 
 
 http.createServer(app).listen(app.get('port'), '0.0.0.0', function(){

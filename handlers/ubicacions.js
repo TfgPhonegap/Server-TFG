@@ -13,7 +13,11 @@ var User = mongoose.model('User', User, 'users');
 
 
 exports.llistaUser = function(req, res){
-	User.findOne({name: req.params.userName}, function(err, doc){
+	var usuari = {name: req.params.userName};
+	if (req.params.userName == '***')
+		usuari = {name: req.headers.username};
+	console.log('usari que anem a buscar ubicacions--> ' + usuari.name);
+	User.findOne(usuari, function(err, doc){
 		if (err) {
 			res.send(err);
 		}
