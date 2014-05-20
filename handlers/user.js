@@ -6,25 +6,68 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectID;
 
+// Esquemes de les diferents coleccions de la bd
 var User = new Schema({
     name 			: {type: String, required: true, trim: true , unique: true}
   , password		: {type: String, required: true}
+  , grup 			: {type: String, required: true}
   , description     : { type: String, required: true, trim: true }
   , ubicacions		: {type : Array , "default" : []}
   , accessos		: {type : Array , "default" : []}	
 });
+var Grup = new Schema({
+    nom 			: {type: String, required: true, trim: true , unique: true}
+  , integrants		: {type : Array , "default" : []}
+  , novetats		: {type : Array , "default" : []}
+});
+
 
 var User = mongoose.model('User', User, 'users');
+var Grup = mongoose.model('Grup', Grup, 'grups');
 
 exports.list = function(req, res){
+	console.log(req.headers.username);
+	var user = req.headers.username;
+	var grup = '';
+	var bons = [];
+	var dolents = [];
+	var usuaris = [];
 	User.find(function(err, doc){
-		res.send(doc);
-	});
-  
+		usuaris = doc;
+		for (var i=0; i<usuaris.length; i++) {
+			if (user == usuaris[i].name)
+				grup = usuaris[i].grup;
+			else {
+				if (usuaris[i].grup=='bons') {
+					console.log('Ha de ser bo');
+					console.log(usuaris[i].name + usuaris[i].grup);
+					bons.push(usuaris[i]);
+				}
+				else {
+					console.log('Ha de ser dolent');
+					console.log(usuaris[i].name + usuaris[i].grup);
+					console.log(usuaris[i]);
+					dolents.push(usuaris[i]);
+				}
+			}
+			console.log('-----------------------------');
+		}	
+		if (grup == 'bons') {
+			console.log('retorno la llista de bons');
+			res.send(bons);
+		}
+		else {
+			console.log('retorno la llista de diolents');
+			res.send(dolents);
+		}
+	});  
 };
 
 exports.userDetails = function(req, res){
-	User.findOne({name: req.params.userName}, function(err, doc){
+	var user = req.params.userName;
+	if (user == '***')
+		user = req.headers.username;
+	User.findOne({name: user}, function(err, doc){
 		if (doc == null) {
 			res.send(req.params.userName + " no és cap user");
 		}

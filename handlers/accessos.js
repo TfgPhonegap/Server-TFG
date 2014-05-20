@@ -13,7 +13,10 @@ var User = mongoose.model('User', User, 'users');
 
 
 exports.llista = function(req, res){
-	User.findOne({name: req.params.userName}, function(err, doc){
+	var usuari = {name: req.params.userName};
+	if (req.params.userName == '***')
+		usuari = {name: req.headers.username};
+	User.findOne(usuari, function(err, doc){
 		if (err) {
 			res.send(err);
 		}

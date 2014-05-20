@@ -1,4 +1,4 @@
 [
-	{nom: 'bons', integrants: ['Batman', 'Spiderman', 'Wolverine', 'Captain America']},
-	{nom: 'dolents', integrants: ['IronMan', 'Fantastic four', 'Thor', 'Hulk']}
+	{nom: 'bons', integrants: ['Batman', 'Spiderman', 'Fantastic four', 'Thor'], novetats: []},
+	{nom: 'dolents', integrants: ['IronMan', 'Wolverine', 'Hulk', 'Captain America'], novetats: []}
 ]

@@ -4,6 +4,7 @@ var ubicacions = require("./handlers/ubicacions");
 var images = require("./handlers/images");
 var accessos = require("./handlers/accessos");
 var seguretat = require("./handlers/seguretat");
+var novetats = require("./handlers/novetats");
 
 //var namespace = require('express-namespace');
 
@@ -31,7 +32,7 @@ module.exports = function(app) {
 	});
 	app.namespace('/ubicacions', function(){
 		app.get('/:userName', auth, ubicacions.llistaUser);
-		app.post('/nova/:userName', ubicacions.novaUbicacio);
+		app.post('/nova/', ubicacions.novaUbicacio);
 	});
 	app.namespace('/accessos', function(){
 		app.get('/:userName', auth, accessos.llista);
@@ -42,7 +43,7 @@ module.exports = function(app) {
 		app.get('/ubicacio/:lloc', images.ubicacio);
 	});
 
-
+	app.get('/novetats', auth, novetats.llista);
 	// Login/Logout Routes
 	app.post('/login', seguretat.login);
 	
