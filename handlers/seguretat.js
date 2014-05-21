@@ -5,7 +5,7 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectID;
-
+var util = require("../util/util");
 
 
 var User = mongoose.model('User', User, 'users');
@@ -26,8 +26,8 @@ exports.login = function(req, res){
 			else {
 				if (user.password == doc.password) {
 					console.log('Login Acceptat');
-					// Cal tornar token (fer-ho amb JWT)
-					res.send({authorizationToken: 'tokentokentokentoken', username: user.username});
+					res.send({authorizationToken: util.tokenizer.generateToken({username: user.username}),
+						 username: user.username});
 				}
 				else {
 					console.log('envian un 401 de tornada');
