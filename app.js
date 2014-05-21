@@ -5,10 +5,15 @@
 
 var express = require('express')
   , http = require('http')
+  , https = require('https')
   , namespace = require('express-namespace')
   , mongoose = require("mongoose")
   , path = require('path')
-  , passport = require('passport');
+  , passport = require('passport')
+  , fs = require('fs')
+  , privateKey  = fs.readFileSync('data/certificatServerAplicacio/server.key', 'utf8')
+  , certificate = fs.readFileSync('data/certificatServerAplicacio/server.crt', 'utf8')
+  , credentials = {key: privateKey, cert: certificate};
 
 
 var app = express();
@@ -48,6 +53,9 @@ routes = require('./routes')(app, passport);
 
 http.createServer(app).listen(app.get('port'), '0.0.0.0', function(){
   console.log("Express server listening on port " + app.get('port'));
+});
+https.createServer(credentials, app).listen(3043, '0.0.0.0', function(){
+  console.log("Express HTTPS server listening on port " + 3043);
 });
 
 
