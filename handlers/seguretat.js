@@ -26,7 +26,8 @@ exports.login = function(req, res){
 			else {
 				if (user.password == doc.password) {
 					console.log('Login Acceptat');
-					res.send({authorizationToken: util.tokenizer.generateToken({username: user.username}),
+					res.send({authorizationToken: util.tokenizer.generateToken({username: user.username
+						, grup: doc.grup}),
 						 username: user.username});
 				}
 				else {

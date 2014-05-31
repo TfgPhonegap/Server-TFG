@@ -20,10 +20,15 @@ var Grup = new Schema({
   , integrants		: {type : Array , "default" : []}
   , novetats		: {type : Array , "default" : []}
 });
+var Porta = new Schema({
+    id 				: {type: String, required: true, trim: true , unique: true}
+  , grupsAdmesos	: {type : Array , "default" : []}
+});
 
 
 var User = mongoose.model('User', User, 'users');
 var Grup = mongoose.model('Grup', Grup, 'grups');
+var Porta = mongoose.model('Porta', Porta, 'portes');
 
 exports.list = function(req, res){
 	console.log(req.headers.username);

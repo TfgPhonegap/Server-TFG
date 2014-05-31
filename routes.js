@@ -55,7 +55,7 @@ module.exports = function(app) {
 	});
 	app.namespace('/accessos', function(){
 		app.get('/:userName', auth, accessos.llista);
-		//app.post('/nova/:userName', ubicacions.novaUbicacio);
+		app.post('/nou', auth, accessos.nouAcces);
 	});
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
