@@ -31,7 +31,6 @@ var Grup = mongoose.model('Grup', Grup, 'grups');
 var Porta = mongoose.model('Porta', Porta, 'portes');
 
 exports.list = function(req, res){
-	console.log(req.headers.username);
 	var user = req.headers.username;
 	var grup = '';
 	var bons = [];
@@ -44,25 +43,18 @@ exports.list = function(req, res){
 				grup = usuaris[i].grup;
 			else {
 				if (usuaris[i].grup=='bons') {
-					console.log('Ha de ser bo');
-					console.log(usuaris[i].name + usuaris[i].grup);
 					bons.push(usuaris[i]);
 				}
 				else {
-					console.log('Ha de ser dolent');
-					console.log(usuaris[i].name + usuaris[i].grup);
-					console.log(usuaris[i]);
 					dolents.push(usuaris[i]);
 				}
 			}
-			console.log('-----------------------------');
 		}	
+		// Mirar de fer-ho dinàmic. Si es crea un grup nou que passa?
 		if (grup == 'bons') {
-			console.log('retorno la llista de bons');
 			res.send(bons);
 		}
 		else {
-			console.log('retorno la llista de diolents');
 			res.send(dolents);
 		}
 	});  

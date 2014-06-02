@@ -40,7 +40,6 @@ exports.novaUbicacio = function(req, res){
 	var novaData = req.param("data");
 	var novaHora = req.param("hora");
 	var usuari = req.headers.username;
-	console.log('User capcelera -_Z> ' + usuari);
 	if (typeof usuari === "undefined") 
 		res.send(401);
 
@@ -83,9 +82,6 @@ exports.novaUbicacio = function(req, res){
 				    res.send(false);
 				  }
 				  else {
-				  	console.log('No hi ha hagut error :)))))');
-
-				  	console.log('Nom user--> ' + user.name + user.grup);
 				  	Grup.findOne({nom: user.grup}, function(err, doc){
 				  		if (err) 
 				  			console.log(err);
@@ -97,10 +93,6 @@ exports.novaUbicacio = function(req, res){
 							Grup.findOneAndUpdate(query, update, options, function(err, user) {
 								if (err)
 									console.log(err);
-								else {
-									console.log('Novetats actualitzades correctament');
-									console.log(doc.novetats);
-								}
 							});
 				  		}
 

@@ -4,6 +4,7 @@ var ubicacions = require("./handlers/ubicacions");
 var images = require("./handlers/images");
 var accessos = require("./handlers/accessos");
 var seguretat = require("./handlers/seguretat");
+var portes = require("./handlers/portes");
 var novetats = require("./handlers/novetats");
 var util = require("./util/util");
 var mongoose = require("mongoose");
@@ -60,6 +61,9 @@ module.exports = function(app) {
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
 		app.get('/ubicacio/:lloc', images.ubicacio);
+	});
+	app.namespace('/clau', function(){
+		app.get('/:idPorta', portes.clauQR);
 	});
 
 	app.get('/novetats', auth, novetats.llista);

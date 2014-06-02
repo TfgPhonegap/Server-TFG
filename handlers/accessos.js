@@ -11,12 +11,13 @@ var util = require("../util/util");
 
 var User = mongoose.model('User', User, 'users');
 var Porta = mongoose.model('Porta', Porta, 'portes');
+var Grup = mongoose.model('Grup', Grup, 'grups');
 
 
 exports.llista = function(req, res){
-	var usuari = {name: util.tokenizer.getPayload(req.headers.authorization).username};
+	var usuari = {name: req.params.userName};
 	if (req.params.userName == '***')
-		usuari = {name: req.headers.username};
+		usuari = {name: util.tokenizer.getPayload(req.headers.authorization).username};
 	User.findOne(usuari, function(err, doc){
 		if (err) {
 			res.send(err);
@@ -38,9 +39,9 @@ exports.nouAcces = function(req, res){
 	//Considero que si existeix el token l'usuari i grup existiran. (Pensar si això és veritat o no)
 	var usuari = util.tokenizer.getPayload(req.headers.authorization).username;
 	var grup = util.tokenizer.getPayload(req.headers.authorization).grup;
-	console.log('Nou acces handler');
-	console.log(req.headers);
-	console.log(usuari + grup);
+	var nouLloc = req.param("idPorta");
+	var novaData = req.param("data");
+	var novaHora = req.param("hora");
 	var idPorta = {id: req.param("idPorta")};
 	var userAdmes = false;
 	Porta.findOne(idPorta, function(err, doc){
@@ -50,7 +51,7 @@ exports.nouAcces = function(req, res){
 		else {
 			if (doc == null) {
 				console.log('nullllllll');
-				res.send('porta inexistent');
+				res.send({resolucioAcces: 'Aquesta porta no existeix :('});
 			}
 			else {
 				console.log('document no està buit ' + doc);
@@ -58,6 +59,46 @@ exports.nouAcces = function(req, res){
 					if (grup == doc.grupsAdmesos[i])
 						userAdmes = true;
 				}
+				//Busquem l'user per afegir l'accés, tan si és el denegat com l'admés.
+				User.findOne({name: usuari}, function(err, userTrobat){
+					if (!err && userTrobat != null) {
+						var dataTrobada=false;
+						var i=0;
+						for (i; i<userTrobat.accessos.length; i++) {
+							if (novaData == userTrobat.accessos[i].data) {
+								dataTrobada=true;
+								break;
+							}
+						}
+						var query = {name: usuari};
+						var update = {accessos: userTrobat.accessos};
+						var options = {new: true};
+						if (dataTrobada) {
+							userTrobat.accessos[i].accessosDia.unshift({resultat: userAdmes,
+					                  lloc: nouLloc,
+					                  hora: novaHora});
+						}
+						else {
+							userTrobat.accessos.unshift({data: novaData, accessosDia: [{resultat: userAdmes,
+					                  lloc: nouLloc,
+					                  hora: novaHora}]});
+						}
+						User.findOneAndUpdate(query, update, options, function(err, userFinal) {
+							if (!err) {
+								Grup.findOne({nom: userFinal.grup}, function(err, grup){
+									grup.novetats.unshift({tipus: 'acces', userName: userFinal.name, 
+										lloc: nouLloc});
+						  			var query = {nom: userFinal.grup};
+									var update = {novetats: grup.novetats};
+									var options = {new: true};
+									// Mirar com arreclar això. No pot ser fer el mètode i res a dins...
+									Grup.findOneAndUpdate(query, update, options, function(err, grup2) {
+									});
+							  	});
+							}
+						});
+					}
+				});
 				if (userAdmes) {
 					//Afegir accès i contestar amb un acces permès.
 					console.log('Lusuari està acceptat per entrar');

@@ -44,5 +44,12 @@ exports.db = {
 			console.log('hauria de retornar true' + doc);
 			return true;
 		});
-	}
+	},
+  findUser: function(username) {
+    User.findOne({name: username}, function(err, doc){
+      if (doc == null)
+        return null;
+      return doc;
+    });
+  }
 }

@@ -29,9 +29,9 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
   // required for passport
-  app.use(express.session({ secret: 'contrassenyasupersecreta' })); // session secret
+  //app.use(express.session({ secret: 'contrassenyasupersecreta' })); // session secret
   app.use(passport.initialize());
-  app.use(passport.session()); // persistent login sessions
+  //app.use(passport.session()); // persistent login sessions
 });
 
 // PERMETRE CRIDES CORS

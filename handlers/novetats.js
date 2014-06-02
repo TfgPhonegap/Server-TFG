@@ -30,10 +30,6 @@ exports.llista = function(req, res){
 						res.send('Grup inexistent');
 					}
 					else {
-						console.log(doc);
-						console.log(doc.novetats);
-						for (var i = 0;i<doc.novetats.length;i++)
-							console.log(doc.novetats[i].userName);
 						res.send(doc.novetats);
 					}
 
