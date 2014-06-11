@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Clau QR</title>
+  </head>
+   <script src="/socket.io/socket.io.js"></script>
+   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <body>
+    <Button>APRETA PEL QR</Button>
+  </body>
+  <script>
+    var socket = io();
+     $('Button').click(function(){
+        console.log('Boto apretat ');
+          socket.emit('BotoApretat');
+      });
+  </script>
+</html>

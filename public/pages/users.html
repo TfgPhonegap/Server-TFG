@@ -1,0 +1,7 @@
+<div class="jumbotron text-center">
+		<h1>Llista users</h1>
+		<Button class="btn glyphicon glyphicon-remove" ng-click="addUser()"> Add user</Button>
+		<div ng-repeat="user in users">
+			<p>{{ user.name }} <Button class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"></Button></p>
+		</div>
+	</div>

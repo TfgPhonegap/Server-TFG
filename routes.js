@@ -45,18 +45,18 @@ var auth = function(req, res, next){
 module.exports = function(app) {
 	app.get('/', routes.index);
 	app.namespace('/users', function(){
-		app.get('/', auth, user.list);
-		app.get('/:userName', auth, user.userDetails);
+		app.get('/',  user.list);
+		app.get('/:userName',  user.userDetails);
 		app.post('/new', user.newUser);
 		app.delete('/delete/:userName', user.delete);
 	});
 	app.namespace('/ubicacions', function(){
-		app.get('/:userName', auth, ubicacions.llistaUser);
+		app.get('/:userName',  ubicacions.llistaUser);
 		app.post('/nova/', ubicacions.novaUbicacio);
 	});
 	app.namespace('/accessos', function(){
-		app.get('/:userName', auth, accessos.llista);
-		app.post('/nou', auth, accessos.nouAcces);
+		app.get('/:userName',  accessos.llista);
+		app.post('/nou', accessos.nouAcces);
 	});
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
@@ -66,7 +66,7 @@ module.exports = function(app) {
 		app.get('/:idPorta', portes.clauQR);
 	});
 
-	app.get('/novetats', auth, novetats.llista);
+	app.get('/novetats', novetats.llista);
 	// Login/Logout Routes
 	app.post('/login', seguretat.login);
 	
