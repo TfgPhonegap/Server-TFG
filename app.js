@@ -54,9 +54,7 @@ routes = require('./routes')(app, passport);
 app.get('/hola', function(req, res){
   res.sendfile('prova.html');
 });
-app.get('/admin', function(req, res){
-  res.sendfile('admin.html');
-});
+
 
 
 

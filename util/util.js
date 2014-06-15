@@ -31,6 +31,24 @@ exports.tokenizer = {
         return jwt.decode(token, this.secret);
     }
 }
+exports.porta = {
+  clausEnviades: [],
+  setClau: function (idPorta, token) {
+    clausEnviades.push({porta: idPorta, clau: token});
+  },
+  getClauPorta: function (idPorta) {
+    for (var i=0; i<clausEnviades.length ; i++) {
+      if (idPorta == clausEnviades[i].porta) {
+        var clau = clausEnviades[i].clau;
+        //Eliminem el parell ja que el retornarem
+        clausEnviades.splice(i, 1);
+        return clau;
+      }
+    }
+    // No s'ha trobat clau per aquesta porta
+    return null;
+  }
+}
 
 exports.db = {
 	isUser: function(username) {

@@ -1,0 +1,16 @@
+<div class="jumbotron text-center">
+		<!--<Button class="btn glyphicon glyphicon-qrcode" ng-click="">Prem per obtenir clau</Button>-->
+		<button class="btn btn-default"  ng-click="getClau()">
+	    	<span class="glyphicon glyphicon-qrcode" style="vertical-align:middle">
+	    	</span> Clau
+	    </button>
+
+			<div  class="square">
+				<div  style="margin-top: 5px" class="jumbotron text-center">
+					<qr size="280"  text="string">
+					</qr>
+				</div>
+			</div>
+			 <input type="text" class="form-control" ng-model="string" placeholder="Username">
+	
+	</div>

@@ -15,11 +15,9 @@ var Porta = mongoose.model('Porta', Porta, 'portes');
 var Grup = mongoose.model('Grup', Grup, 'grups');
 
 
-exports.clauQR = function(req, res){
+exports.vistaPorta = function(req, res){
 	var idPorta = req.params.idPorta;
-	var socket = io.connect();
-	socket.emit('PortesJS');
 	//res.render('clauQR', { idPorta: idPorta });
-	 res.sendfile('./views/prova.html');
+	res.sendfile('portes.html');
   
 };

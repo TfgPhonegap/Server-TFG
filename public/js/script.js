@@ -152,3 +152,31 @@
 	    $state.go('app.home', {}, {reload: true, inherit: false});
 	  });     
 })
+
+// Modul per portes.
+var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']);
+
+	// configure our routes
+	portesApp.config(function($routeProvider) {
+		$routeProvider
+
+			// route for the home page
+			.when('/', {
+				templateUrl : 'pages/porta.html',
+				controller  : 'portaController'
+			});
+	});
+
+	// create the controller and inject Angular's $scope
+	portesApp.controller('mainController', function($scope) {
+		// create a message to display in our view
+		$scope.message = 'Everyone come and see how good I look!';
+	});
+
+	portesApp.controller('portaController', function($scope, $http) {
+		$scope.string = "ksndkfndsf";
+		$scope.getClau = function(){
+			console.log("GETCLAU PLS");
+			$scope.string = '{"tipus": "novaUbicacio", "lloc":"San Diego"}';
+		};
+	});

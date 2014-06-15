@@ -44,6 +44,7 @@ var auth = function(req, res, next){
 
 module.exports = function(app) {
 	app.get('/', routes.index);
+	// Aquestes rutes només han de poder ser accedides per un admin.
 	app.namespace('/users', function(){
 		app.get('/',  user.list);
 		app.get('/:userName',  user.userDetails);
@@ -62,8 +63,16 @@ module.exports = function(app) {
 		app.get('/avatar/:userName', images.perfil);
 		app.get('/ubicacio/:lloc', images.ubicacio);
 	});
-	app.namespace('/clau', function(){
-		app.get('/:idPorta', portes.clauQR);
+	//Aquesta ruta ha de ser perquè la web Angular pugui demanar la clau.
+	/*app.namespace('/clau', function(req, res){
+		app.get('/:idPorta', res.sendfile('porta.html'));
+	});*/
+
+	app.get('/admin', function(req, res){
+	  res.sendfile('admin.html');
+	});
+	app.get('/porta', function(req, res){
+	  res.sendfile('portes.html');
 	});
 
 	app.get('/novetats', novetats.llista);
