@@ -1,7 +1,58 @@
 <div class="jumbotron text-center">
-		<h1>Llista users</h1>
-		<Button class="btn glyphicon glyphicon-remove" ng-click="addUser()"> Add user</Button>
-		<div ng-repeat="user in users">
-			<p>{{ user.name }} <Button class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"></Button></p>
-		</div>
+	<h1>Llista users</h1>
+	<h3>Arreclar el llistat del admin: Fer una ruta nova o un login d'admin com a la app?(millor segona)</h3>
+	<Button class="btn glyphicon glyphicon-remove" ng-click="addUser()"> Add user</Button>
+	<div ng-repeat="user in users">
+		<p>{{ user.name }} <Button class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"></Button></p>
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+<div ng-controller="ModalDemoCtrl">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Nou usuari</h3>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+			  <div class="form-group">
+			    <label for="userName">User name</label>
+			    <input ng-model="user.name" type="text" class="form-control" id="userName" 
+			    placeholder="Enter username here">
+			  </div>
+			  <div class="form-group">
+			    <label  for="description">Description</label>
+			    <input ng-model="user.description" type="text" class="form-control" id="description" placeholder="Brief description of the user">
+			  </div>
+			  <div>
+			  	<label for="select">Grup</label>
+			  	<select id="select" class="form-control" ng-model="selected.name"  >
+				  <option ng-repeat="item in items">{{item.name}}</option>
+				</select>
+			  </div>
+			</form>
+        </div>
+        <div class="modal-footer">
+        <p>{{errorMessage}}</p>
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>

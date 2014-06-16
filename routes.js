@@ -6,6 +6,8 @@ var accessos = require("./handlers/accessos");
 var seguretat = require("./handlers/seguretat");
 var portes = require("./handlers/portes");
 var novetats = require("./handlers/novetats");
+var grups = require("./handlers/grups");
+var admin = require("./handlers/admin");
 var util = require("./util/util");
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema
@@ -46,36 +48,44 @@ module.exports = function(app) {
 	app.get('/', routes.index);
 	// Aquestes rutes només han de poder ser accedides per un admin.
 	app.namespace('/users', function(){
-		app.get('/',  user.list);
-		app.get('/:userName',  user.userDetails);
+		app.get('/',auth ,  user.list);
+		app.get('/:userName',auth ,  user.userDetails);
 		app.post('/new', user.newUser);
 		app.delete('/delete/:userName', user.delete);
 	});
 	app.namespace('/ubicacions', function(){
-		app.get('/:userName',  ubicacions.llistaUser);
-		app.post('/nova/', ubicacions.novaUbicacio);
+		app.get('/:userName',auth ,  ubicacions.llistaUser);
+		app.post('/nova/',auth , ubicacions.novaUbicacio);
 	});
 	app.namespace('/accessos', function(){
-		app.get('/:userName',  accessos.llista);
+		app.get('/:userName',auth ,  accessos.llista);
 		app.post('/nou', accessos.nouAcces);
 	});
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
-		app.get('/ubicacio/:lloc', images.ubicacio);
+		app.get('/ubicacio/:lloc' , images.ubicacio);
 	});
 	//Aquesta ruta ha de ser perquè la web Angular pugui demanar la clau.
-	/*app.namespace('/clau', function(req, res){
-		app.get('/:idPorta', res.sendfile('porta.html'));
-	});*/
+	app.get('/clau', portes.getClau);
 
-	app.get('/admin', function(req, res){
-	  res.sendfile('admin.html');
+	app.namespace('/grups', function(){
+		app.get('/' ,  grups.llista);
+		//app.post('/new', user.newUser);
+		//app.delete('/delete/:userName', user.delete);
 	});
+
+	app.namespace('/admin', function(){
+		app.get('/', function(req, res){
+		  res.sendfile('admin.html');
+		});
+		app.get('/users', admin.llistaUsers);
+	});
+	
 	app.get('/porta', function(req, res){
 	  res.sendfile('portes.html');
 	});
 
-	app.get('/novetats', novetats.llista);
+	app.get('/novetats',auth , novetats.llista);
 	// Login/Logout Routes
 	app.post('/login', seguretat.login);
 	

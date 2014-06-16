@@ -46,7 +46,7 @@
 
 	scotchApp.controller('usersController', function($scope, $http, $modal) {
 		$scope.users = [];
-		$http.get('/users').success(function (result) {
+		$http.get('/admin/users').success(function (result) {
 			console.log('Dins del succes!!!');
 	      	$scope.users = result;
 		  }).error(function (data) {
@@ -57,7 +57,7 @@
 			$http.delete('/users/delete/' + username).success(function (res){
 				console.log(res);
 				// Actualitzem la llista de users.
-				$http.get('/users').success(function (result) {
+				$http.get('/admin/users').success(function (result) {
 					console.log('Dins del succes!!!');
 			      	$scope.users = result;
 				  }).error(function (data) {
@@ -70,16 +70,57 @@
 
 			// El modal no apareix, es queda la pantalla negra.
 		    var modalInstance = $modal.open({
-		      templateUrl: 'pages/modal.html',
+		      templateUrl: 'myModalContent.html',
+		      controller: 'modelInstanceController',
 		      resolve: {
-		        items: function () {
-		          return $scope.items;
+		        actualitzarLlista: function () {
+		        	$http.get('/admin/users').success(function (result) {
+						console.log('Actualitzant llista');
+				      	$scope.users = result;
+					  }).error(function (data) {
+					    console.log('-------error------');
+					  });
+		          return;
 		        }
 		      }
 		    });
+		    console.log('Quan surt això?');
 		};
 		
 
+	});
+
+	scotchApp.controller('modelInstanceController', function($scope, $http, $modalInstance, actualitzarLlista) {
+		$scope.items = {};
+		$http.get('/grups').success(function (result) {
+				$scope.items = result;
+				return;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+		$scope.selected = {};
+		$scope.user = {name: null, description: null};
+		$scope.ok = function () {
+			var data = {name: $scope.user.name, description: $scope.user.description, 
+				grup: $scope.selected.name};
+			if ($scope.user.name == null || $scope.user.description == null || angular.isUndefined($scope.selected.name))
+				$scope.errorMessage = 'Tots els camps són obligatoris';
+			else {
+			    $http.post('/users/new', data).success(function (result) {
+			    	console.log(result);
+			    	if (result=='ok'){
+			    		alert('Usuari creat correctament');	
+			    		$modalInstance.close($scope.selected.item);
+			    		actualitzarLlista;
+			    	}
+			    	else
+			    		alert('Error en al creacio');
+			    }).error(function (data) {
+			      console.log('-------error------');
+			    });
+			}
+		  
+		};
 	});
 
 
@@ -174,9 +215,19 @@ var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']
 	});
 
 	portesApp.controller('portaController', function($scope, $http) {
-		$scope.string = "ksndkfndsf";
+		$scope.string = "";
+		$scope.amagat = true;
 		$scope.getClau = function(){
-			console.log("GETCLAU PLS");
-			$scope.string = '{"tipus": "novaUbicacio", "lloc":"San Diego"}';
+			// Aquí es farà la petició de clau al server.
+			$http.get('/clau').success(function (result) {
+				console.log(result.clau);
+			      	$scope.string = '{"tipus": "nouAcces", "id":"'+result.porta+'", "clau": " '
+			      	 + result.clau + '"}';
+			      	$scope.amagat = false;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+			
+			
 		};
 	});

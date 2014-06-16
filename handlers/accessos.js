@@ -50,8 +50,8 @@ exports.nouAcces = function(req, res){
 		}
 		else {
 			if (doc == null) {
-				console.log('nullllllll');
-				res.send({resolucioAcces: 'Aquesta porta no existeix :('});
+				console.log('null');
+				res.send({resolucioAcces: 'Aquesta porta no existeix'});
 			}
 			else {
 				console.log('document no està buit ' + doc);

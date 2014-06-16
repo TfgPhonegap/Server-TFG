@@ -36,9 +36,10 @@ exports.list = function(req, res){
 	var bons = [];
 	var dolents = [];
 	var usuaris = [];
+	var resultat = [];
 	User.find(function(err, doc){
 		usuaris = doc;
-		for (var i=0; i<usuaris.length; i++) {
+/*		for (var i=0; i<usuaris.length; i++) {
 			if (user == usuaris[i].name)
 				grup = usuaris[i].grup;
 			else {
@@ -56,7 +57,21 @@ exports.list = function(req, res){
 		}
 		else {
 			res.send(dolents);
+		}*/
+
+
+		for (var i=0; i<usuaris.length; i++) {
+			if (user == usuaris[i].name) {
+				grup = usuaris[i].grup;
+				break;
+			}
 		}
+		for (var i=0; i<usuaris.length; i++) {
+			if (grup == usuaris[i].grup && user != usuaris[i].name)
+				resultat.push(usuaris[i]);
+		}
+		res.send(resultat);
+
 	});  
 };
 
@@ -76,11 +91,16 @@ exports.userDetails = function(req, res){
 exports.newUser = function(req, res){
 
 	console.log("user="+req.param("name"));
-	console.log("pass="+req.param("description"));
+	console.log("Descripcio="+req.param("description"));
+	console.log(req.param("grup"));
 	var user_data = {
 		name: req.param("name"),
 		description: req.param("description"),
-		avatar: req.param("avatar")
+		grup: req.param("grup"),
+		avatar: 'no foto',
+		ubicacions: [],
+		accessos: [],
+		password: '1234'
 	};
 	var newUser = new User(user_data);
 	newUser.save( function(error, data){
@@ -88,7 +108,7 @@ exports.newUser = function(req, res){
 	        res.json(error);
 	    }
 	    else{
-	        res.json(data);
+	        res.send('ok');
 	    }
 	});
 };
