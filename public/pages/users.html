@@ -1,7 +1,6 @@
 <div class="jumbotron text-center">
 	<h1>Llista users</h1>
-	<h3>Arreclar el llistat del admin: Fer una ruta nova o un login d'admin com a la app?(millor segona)</h3>
-	<Button class="btn glyphicon glyphicon-remove" ng-click="addUser()"> Add user</Button>
+	<Button class="btn glyphicon glyphicon-plus" ng-click="addUser()"> Add user</Button>
 	<div ng-repeat="user in users">
 		<p>{{ user.name }} <Button class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"></Button></p>
 	</div>

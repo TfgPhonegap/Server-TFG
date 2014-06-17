@@ -36,3 +36,9 @@ exports.getClau = function(req, res){
 	console.log('Enviant clau --> ' + OTP);
 	res.send({porta: idPorta, clau: OTP});
 };
+
+exports.llista = function(req, res){
+	Porta.find(function(err, doc){
+		res.send(doc);
+	});
+};

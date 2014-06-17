@@ -79,6 +79,10 @@ module.exports = function(app) {
 		  res.sendfile('admin.html');
 		});
 		app.get('/users', admin.llistaUsers);
+		app.get('/grups', grups.llista);
+		app.post('/grups/nou', grups.nouGrup);
+		app.get('/portes', portes.llista);
+		app.delete('/grups/:grup', grups.delete);
 	});
 	
 	app.get('/porta', function(req, res){

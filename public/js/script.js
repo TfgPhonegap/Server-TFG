@@ -23,6 +23,11 @@
 				controller  : 'usersController'
 			})
 
+			.when('/grups', {
+				templateUrl : 'pages/grups.html',
+				controller  : 'grupsController'
+			})
+
 			// route for the contact page
 			.when('/contact', {
 				templateUrl : 'pages/contact.html',
@@ -84,6 +89,53 @@
 		        }
 		      }
 		    });
+		};
+		
+
+	});
+
+	scotchApp.controller('grupsController', function($scope, $http, $modal) {
+		$scope.grups = [];
+		$http.get('/admin/grups').success(function (result) {
+	      	$scope.grups = result;
+		  }).error(function (data) {
+		    console.log('-------error------');
+		  });
+		$scope.removeGrup = function(grup){
+			console.log('Remove grup --> ' + grup);
+			$http.delete('/admin/grups/' + grup).success(function (res){
+				console.log(res);
+				if (res =='error') {
+					alert("El nombre d'integrants ha de ser 0");
+				}
+				// Actualitzem la llista de users.
+				$http.get('/admin/grups').success(function (result) {
+					//console.log(result);
+			      	$scope.grups = result;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+			});
+		};
+		$scope.addUser = function(){
+			console.log('Click add user!!!');
+
+			
+		    var modalInstance = $modal.open({
+		      templateUrl: 'modalNewGrupContent.html',
+		      controller: 'modelInstanceController',
+		      resolve: {
+		        actualitzarLlista: function () {
+		        	$http.get('/admin/users').success(function (result) {
+						console.log('Actualitzant llista');
+				      	$scope.users = result;
+					  }).error(function (data) {
+					    console.log('-------error------');
+					  });
+		          return;
+		        }
+		      }
+		    });
 		    console.log('Quan surt això?');
 		};
 		
@@ -92,14 +144,24 @@
 
 	scotchApp.controller('modelInstanceController', function($scope, $http, $modalInstance, actualitzarLlista) {
 		$scope.items = {};
+		$scope.portes = {id: 'isi', checked: false};
 		$http.get('/grups').success(function (result) {
 				$scope.items = result;
 				return;
 				  }).error(function (data) {
 				    console.log('-------error------');
 				  });
+		$http.get('/admin/portes').success(function (result) {
+				$scope.portes = result;
+				console.log(result);
+				return;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+		$scope.selectedPorta= {truthy: ''};
 		$scope.selected = {};
 		$scope.user = {name: null, description: null};
+		$scope.grup = {nom: null, portes: []};
 		$scope.ok = function () {
 			var data = {name: $scope.user.name, description: $scope.user.description, 
 				grup: $scope.selected.name};
@@ -120,6 +182,33 @@
 			    });
 			}
 		  
+		};
+		$scope.ok2 = function () {
+			console.log($scope.portes);
+			var portesMarcades = [];
+			var data = {id: '', portesAccessibles: []};
+			for (var i=0; i<$scope.portes.length; i++) {
+				if ($scope.portes[i].checked == true)
+					portesMarcades.push($scope.portes[i].id);
+			}
+			data.nom = $scope.grup.nom;
+			data.portesAccessibles = portesMarcades;
+			//Falta comprovacions als inputs.
+			 $http.post('/admin/grups/nou', data).success(function (result) {
+			    	console.log(result);
+			    	if (result=='ok'){
+			    		alert('Grup creat correctament');	
+			    		$modalInstance.close($scope.selected.item);
+			    	}
+			    	else
+			    		alert('Error en al creacio');
+			    }).error(function (data) {
+			      console.log('-------error------');
+			    });
+		  
+		};
+		$scope.cancel = function () {
+			$modalInstance.close();
 		};
 	});
 

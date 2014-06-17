@@ -89,14 +89,14 @@ exports.userDetails = function(req, res){
 };
 
 exports.newUser = function(req, res){
-
-	console.log("user="+req.param("name"));
-	console.log("Descripcio="+req.param("description"));
-	console.log(req.param("grup"));
+	var name = req.param("name");
+	var descripcio = req.param("description");
+	var grup = req.param("grup");
+	console.log('Grup del nou user' + grup);
 	var user_data = {
-		name: req.param("name"),
-		description: req.param("description"),
-		grup: req.param("grup"),
+		name: name,
+		description: descripcio,
+		grup: grup,
 		avatar: 'no foto',
 		ubicacions: [],
 		accessos: [],
@@ -108,19 +108,57 @@ exports.newUser = function(req, res){
 	        res.json(error);
 	    }
 	    else{
+	    	Grup.findOne({nom: newUser.grup}, function(err, doc){
+		  		if (err) 
+		  			console.log(err);
+		  		else {
+		  			console.log(doc);
+		  			doc.integrants.unshift(newUser.name);
+		  			var query = {nom: newUser.grup};
+					var update = {integrants: doc.integrants};
+					var options = {new: true};
+					Grup.findOneAndUpdate(query, update, options, function(err, user) {
+						if (err)
+							console.log(err);
+					});
+		  		}
+
+		  	});
 	        res.send('ok');
 	    }
 	});
 };
 exports.delete = function(req, res){
 
-
+	var grup ='';
 	User.findOne({name: req.params.userName}, function(err, doc){
 		if (doc == null) {
 			res.send(req.params.userName + " no és cap user");
 		}
+			var grup = doc.grup;
+				Grup.findOne({nom: grup}, function(err, grup){
+				  		if (err) 
+				  			console.log(err);
+				  		else {
+				  			console.log('Nom user ' + doc.name);
+				  			for (var i=0; i<grup.integrants.length; i++) {
+				  				if (grup.integrants[i] == doc.name) {
+				  					grup.integrants.splice (i, 1);
+				  				}
+				  			}
+				  			var query = {nom: grup.nom};
+							var update = {integrants: grup.integrants};
+							var options = {new: true};
+							Grup.findOneAndUpdate(query, update, options, function(err, user) {
+								if (err)
+									console.log(err);
+							});
+				  		}
+
+				  	});
 	}).remove(function(err) {
 		if(!err) {
+
 			console.log('Sha eliminat ' + req.param("userName"));
 			res.send('Sha eliminat ' + req.param("userName"));
 		}
