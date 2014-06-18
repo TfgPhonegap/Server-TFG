@@ -23,6 +23,21 @@
 				controller  : 'usersController'
 			})
 
+			.when('/portes', {
+				templateUrl : 'pages/adminPortes.html',
+				controller  : 'portesController'
+			})
+
+			.when('/users/ubicacions/:username', {
+				templateUrl : 'pages/ubicacionsUser.html',
+				controller  : 'ubicacionsUsersController'
+			})
+
+			.when('/users/accessos/:username', {
+				templateUrl : 'pages/accessosUser.html',
+				controller  : 'accessosUsersController'
+			})
+
 			.when('/grups', {
 				templateUrl : 'pages/grups.html',
 				controller  : 'grupsController'
@@ -49,7 +64,7 @@
 		$scope.message = 'Contact us! JK. This is just a demo.';
 	});
 
-	scotchApp.controller('usersController', function($scope, $http, $modal) {
+	scotchApp.controller('usersController', function($scope, $http, $modal, $location) {
 		$scope.users = [];
 		$http.get('/admin/users').success(function (result) {
 			console.log('Dins del succes!!!');
@@ -90,9 +105,44 @@
 		      }
 		    });
 		};
+
+		$scope.go = function ( path, username ) {
+			console.log(path + username);
+			$location.path( path + username );
+		};
 		
 
 	});
+	scotchApp.controller('ubicacionsUsersController', function($scope, $http, $routeParams) {
+		$scope.ubicacions = [];
+		$scope.user = $routeParams.username;
+		console.log('param' + $routeParams.username);
+		$http.get('/ubicacions/' + $routeParams.username).success(function (result) {
+			console.log('Dins del succes!!!');
+	      	$scope.ubicacions = result;
+	      	console.log($scope.ubicacions);
+		  }).error(function (data) {
+		    console.log('-------error------');
+		  });
+
+		
+
+	});
+
+	scotchApp.controller('accessosUsersController', function($scope, $http, $routeParams) {
+		$scope.accessos = [];
+		$scope.user = $routeParams.username;
+		$http.get('/accessos/' + $routeParams.username).success(function (result) {
+			console.log('Dins del succes!!!');
+	      	$scope.accessos = result;
+		  }).error(function (data) {
+		    console.log('-------error------');
+		  });
+
+		
+
+	});
+
 
 	scotchApp.controller('grupsController', function($scope, $http, $modal) {
 		$scope.grups = [];
@@ -117,7 +167,7 @@
 				  });
 			});
 		};
-		$scope.addUser = function(){
+		$scope.addGrup = function(){
 			console.log('Click add user!!!');
 
 			
@@ -142,7 +192,87 @@
 
 	});
 
-	scotchApp.controller('modelInstanceController', function($scope, $http, $modalInstance, actualitzarLlista) {
+	scotchApp.controller('portesController', function($scope, $http, $modal) {
+		$scope.portes = [];
+		$http.get('/admin/portes').success(function (result) {
+	      	$scope.portes = result;
+		  }).error(function (data) {
+		    console.log('-------error------');
+		  });
+		$scope.removePorta = function(porta){
+			$http.delete('/admin/portes/' + porta).success(function (res){
+				console.log(res);
+				if (res =='error') {
+					alert("Per a eliminar una porta no hi pot haver cap grup admés");
+				}
+				// Actualitzem la llista de users.
+				$http.get('/admin/portes').success(function (result) {
+					//console.log(result);
+			      	$scope.portes = result;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+			});
+		};
+
+		$scope.revocarAcces = function(grup, porta){
+			console.log(grup+porta);
+			$http.delete('/admin/portes/' + porta + '/grup/' + grup).success(function (res){
+				console.log(res);
+				if (res =='error') {
+					alert("Per a eliminar una porta no hi pot haver cap grup admés");
+				}
+				// Actualitzem la llista de users.
+				$http.get('/admin/portes').success(function (result) {
+					//console.log(result);
+			      	$scope.portes = result;
+			      	$scope.apply();
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+			});
+		};
+
+		$scope.addPorta = function(){
+			console.log('Click add user!!!');
+
+			
+		    var modalInstance = $modal.open({
+		      templateUrl: 'modalNewGrupContent.html',
+		      controller: 'modelInstanceController',
+		      resolve: {
+		        actualitzarLlista: function () {
+		        	$http.get('/admin/users').success(function (result) {
+						console.log('Actualitzant llista');
+				      	$scope.users = result;
+					  }).error(function (data) {
+					    console.log('-------error------');
+					  });
+		          return;
+		        }
+		      }
+		    });
+		};
+
+		$scope.permetreAccesGrup = function(porta){
+			console.log('Click add user!!!');
+
+			
+		    var modalInstance = $modal.open({
+		      templateUrl: 'modalPermetreNouGrup.html',
+		      controller: 'modelInstanceNouGrupPortaController',
+		      resolve: {
+		        idPorta: function () {
+		          return porta;
+		        }
+		      }
+		    });
+		};
+		
+
+	});
+
+	scotchApp.controller('modelInstanceController', function($scope, $http, $modalInstance) {
 		$scope.items = {};
 		$scope.portes = {id: 'isi', checked: false};
 		$http.get('/grups').success(function (result) {
@@ -158,6 +288,7 @@
 				  }).error(function (data) {
 				    console.log('-------error------');
 				  });
+		$scope.portaNova = {id: ''};
 		$scope.selectedPorta= {truthy: ''};
 		$scope.selected = {};
 		$scope.user = {name: null, description: null};
@@ -207,81 +338,88 @@
 			    });
 		  
 		};
+		
+		$scope.okPorta = function () {
+			var data = {id: $scope.portaNova.id};
+			if ($scope.portaNova.id == '' )
+				$scope.errorMessage = 'Tots els camps són obligatoris';
+			else {
+			    $http.post('/admin/portes/nova', data).success(function (result) {
+			    	console.log(result);
+			    	if (result=='ok'){
+			    		alert('Porta creada correctament');	
+			    		$modalInstance.close($scope.selected.item);
+			    	}
+			    	else
+			    		alert('Error en al creacio');
+			    }).error(function (data) {
+			      console.log('-------error------');
+			    });
+			}
+		  
+		};
+
+		$scope.cancel = function () {
+			$modalInstance.close();
+		};
+	});
+
+	scotchApp.controller('modelInstanceNouGrupPortaController', function($scope, $http, $modalInstance, idPorta) {
+		$scope.items = {checked: false};
+		$scope.grup = {id: 'isi', checked: false};
+		$scope.portaPermetreNouAcces = idPorta;
+		$http.get('/grups').success(function (result) {
+				$scope.items = result;
+				return;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+		$http.get('/admin/portes').success(function (result) {
+				$scope.portes = result;
+				console.log(result);
+				return;
+				  }).error(function (data) {
+				    console.log('-------error------');
+				  });
+		$scope.selected = {};
+		$scope.user = {name: null, description: null};
+		$scope.grup = {nom: null, portes: []};
+
+		
+		$scope.okNouGrupAdmesPorta = function () {
+			console.log('Volem accedir a porta: ' + $scope.portaPermetreNouAcces);
+			console.log($scope.items);
+			var data = {porta: '', nousGrups: []};
+			var grupsMarcats = [];
+
+				for (var i=0; i<$scope.items.length; i++) {
+					if ($scope.items[i].checked == true)
+						grupsMarcats.push($scope.items[i].name);
+				}
+				data.porta = $scope.portaPermetreNouAcces;
+				data.nousGrups = grupsMarcats;
+			   	$http.put('/admin/portes/nouGrup', data).success(function (result) {
+			    	console.log(result);
+			    	if (result=='ok'){
+			    		alert('Grup afegit correctament');	
+			    		$modalInstance.close();
+			    	}
+			    	else
+			    		alert('Error en al creacio');
+			    }).error(function (data) {
+			      console.log('-------error------');
+			    });
+			
+		  
+		};
+
 		$scope.cancel = function () {
 			$modalInstance.close();
 		};
 	});
 
 
-	scotchApp.controller('LoginController', function($scope, $http, $state, $ionicPopup, AuthenticationService) {
-	  $scope.message = "";
-	  
-	  $scope.user = {
-	    username: null,
-	    password: null
-	  };
-	 
-	  $scope.login = function() {
-	    console.log($scope.user);
-	    AuthenticationService.login($scope.user);
-	  };
-	 
-	  $scope.$on('event:auth-loginRequired', function(e, rejection) {
-	    console.log('Broadcaste cacheado en el controlladorrr');
-	    //$scope.loginModal.show();
-	   
-	      $scope.data = {}
-
-	      // An elaborate, custom popup
-	      var popup = $ionicPopup.show({
-	        templateUrl: 'templates/loginPopup.html',
-	        title: 'LOGIN',
-	        subTitle: $scope.message,
-	        scope: $scope,
-	        buttons: [
-	          {
-	            text: 'Submit',
-	            type: 'button-positive',
-	            onTap: function(e) {
-	              if($scope.user.password==null) {
-	                console.log('nuuuuulllllllll');
-	                //e.preventDefault();
-	                return $scope.data;
-	              }
-	              else {
-	                 return $scope.data;
-	              }
-	             
-	            }
-	          },
-	        ]
-	      });
-	      popup.then(function(res) {
-	        $scope.login();  
-	      });
-
-	  });
-	 
-	 //Deixar que desaparegui el popup.
-	  $scope.$on('event:auth-loginConfirmed', function() {
-	   $scope.username = null;
-	   $scope.password = null;
-	     $scope.loginModal.hide();
-	  });
-	  
-	  //Aquí hauré de mostrar un altre popup dient que algo de la autenticació falla.
-	  $scope.$on('event:auth-login-failed', function(e, status) {
-	    var error = "Login failed.";
-	    if (status == 401) {
-	      error = "Invalid Username or Password.";
-	    }
-	    $scope.message = error;
-	  });
-	 
-	  $scope.$on('event:auth-logout-complete', function() {
-	    $state.go('app.home', {}, {reload: true, inherit: false});
-	  });     
-})
+	
 
 // Modul per portes.
 var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']);

@@ -69,6 +69,8 @@ exports.delete = function(req, res){
 	});
 	console.log('Això no es pot veure mai :(((((');
 };
+
+
 exports.nouGrup = function(req, res){
 	var nom = req.param("nom");
 	var portesAccessibles = req.param("portesAccessibles");

@@ -54,11 +54,11 @@ module.exports = function(app) {
 		app.delete('/delete/:userName', user.delete);
 	});
 	app.namespace('/ubicacions', function(){
-		app.get('/:userName',auth ,  ubicacions.llistaUser);
+		app.get('/:userName',  ubicacions.llistaUser);
 		app.post('/nova/',auth , ubicacions.novaUbicacio);
 	});
 	app.namespace('/accessos', function(){
-		app.get('/:userName',auth ,  accessos.llista);
+		app.get('/:userName' ,  accessos.llista);
 		app.post('/nou', accessos.nouAcces);
 	});
 	app.namespace('/images', function(){
@@ -82,6 +82,10 @@ module.exports = function(app) {
 		app.get('/grups', grups.llista);
 		app.post('/grups/nou', grups.nouGrup);
 		app.get('/portes', portes.llista);
+		app.post('/portes/nova', portes.novaPorta);
+		app.put('/portes/nouGrup', portes.nouAccesGrup);
+		app.delete('/portes/:porta', portes.delete);
+		app.delete('/portes/:porta/grup/:grup', portes.revocarAcces);
 		app.delete('/grups/:grup', grups.delete);
 	});
 	

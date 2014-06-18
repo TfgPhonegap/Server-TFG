@@ -1,0 +1,24 @@
+<div class="jumbotron text-center">
+	<h1>Accessos {{user}}</h1>
+	<table class="table table-striped">
+	    <thead>
+	        <tr>
+	        	<th>Dia</th>
+	        	<th>hora</th>
+	            <th>Lloc</th>
+	            <th>Resolució</th>
+	        </tr>
+	    </thead>
+	    <tbody ng-repeat="dia in accessos" >	       
+	        <tr ng-repeat="acces in dia.accessosDia">
+	        	<td class="text-left">{{dia.data}}</td>
+	        	<td class="text-left">{{acces.hora}}</td>
+		        <td class="text-left">{{acces.lloc}}</td>
+		        <td ng-if="acces.resultat" class="text-left"><p class="
+glyphicon glyphicon-ok"></p></td>        
+		        <td ng-if="!acces.resultat" class="text-left"><p class="
+glyphicon glyphicon-remove"></p></td>
+	        </tr>
+	    </tbody>
+	</table>
+</div>

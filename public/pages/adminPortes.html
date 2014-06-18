@@ -1,0 +1,66 @@
+<div class="jumbotron text-center">
+	<h1>Llista portes</h1>
+	<Button class="btn glyphicon glyphicon-plus" ng-click="addPorta()"> Add porta</Button>
+	<table class="table table-striped">
+	    <thead>
+	        <tr>
+	            <th>Porta</th>
+	            <th>Grups admesos</th>
+	            <th>Eliminar</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr ng-repeat="porta in portes | orderBy:'id'">
+	            <td class="text-left">{{porta.id}} <Button class="btn glyphicon glyphicon-plus" ng-click="permetreAccesGrup(porta.id)"> Afegir grup</Button></td>
+	            <td class="text-left"><div ng-repeat="grup in porta.grupsAdmesos"><Button class="btn glyphicon glyphicon-remove" ng-click="revocarAcces(grup, porta.id)"> Revocar accés</Button>  {{grup}}</div></td>
+	            <td class="text-left"><Button class="btn glyphicon glyphicon-remove" ng-click="removePorta(porta.id)"></Button></td>
+	        </tr>
+	    </tbody>
+	</table>
+
+	
+</div>
+
+<div ng-controller="ModalDemoCtrl">
+    <script type="text/ng-template" id="modalNewGrupContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Nova porta</h3>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+			  <div class="form-group">
+			    <label for="grupName">Nom porta</label>
+			    <input ng-model="portaNova.id" type="text" class="form-control" id="grupName" 
+			    placeholder="Escriu el nom de la porta aquí">
+			  </div>
+			</form>
+        </div>
+        <div class="modal-footer">
+        <p>{{errorMessage}}</p>
+            <button class="btn btn-primary" ng-click="okPorta()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>
+<div ng-controller="ModalDemoCtrla">
+    <script type="text/ng-template" id="modalPermetreNouGrup.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{portaPermetreNouAcces}}</h3>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+			  <label for="grups">Grups</label>
+			   <div id="grups" class="checkbox" ng-repeat="item in items">
+			
+			      <input ng-model="item.checked" type="checkbox"> {{item.name}} </input>
+			    
+			  </div>
+			</form>
+        </div>
+        <div class="modal-footer">
+        <p>{{errorMessage}}</p>
+            <button class="btn btn-primary" ng-click="okNouGrupAdmesPorta()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>

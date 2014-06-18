@@ -1,28 +1,27 @@
 <div class="jumbotron text-center">
 	<h1>Llista users</h1>
 	<Button class="btn glyphicon glyphicon-plus" ng-click="addUser()"> Add user</Button>
-	<div ng-repeat="user in users">
-		<p>{{ user.name }} <Button class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"></Button></p>
-	</div>
-
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-	      </div>
-	      <div class="modal-body">
-	        ...
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	<table class="table table-striped">
+	    <thead>
+	        <tr>
+	            <th>Username</th>
+	            <th>Grup</th>
+	            <th class="text-right">Opcions</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr ng-repeat="user in users | orderBy:'grup'">
+	            <td class="text-left">{{user.name}}</td>
+	            <td class="text-left">{{user.grup}}</td>
+	            <td class="text-right">
+	            	<Button style="margin-left: 5px" class="btn glyphicon glyphicon-edit" ng-click=""> 
+	            	<Button style="margin-left: 5px" class="btn glyphicon glyphicon-remove" ng-click="removeUser(user.name)"> 
+	            	<Button style="margin-left: 5px" class="btn glyphicon glyphicon-map-marker" ng-click="go('/users/ubicacions/', user.name)"> Ubicacions</Button>
+	            	<Button style="margin-left: 5px" class="btn glyphicon glyphicon-book" ng-click="go('/users/accessos/', user.name)"> Accessos</Button>
+	            </td>
+	        </tr>
+	    </tbody>
+	</table>
 </div>
 <div ng-controller="ModalDemoCtrl">
     <script type="text/ng-template" id="myModalContent.html">
