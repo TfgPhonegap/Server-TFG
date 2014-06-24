@@ -34,18 +34,27 @@ exports.tokenizer = {
 exports.porta = {
   clausEnviades: [],
   setClau: function (idPorta, token) {
-    clausEnviades.push({porta: idPorta, clau: token});
+    // Abans de posar la nova clau, mirem si n'hi havia alguna ja creada i l'esborrem.
+    for (var i=0; i<this.clausEnviades.length ; i++)
+      if(this.clausEnviades[i].porta == idPorta)
+        this.clausEnviades.splice(i, 1);
+    this.clausEnviades.push({porta: idPorta, clau: token});
   },
   getClauPorta: function (idPorta) {
-    for (var i=0; i<clausEnviades.length ; i++) {
-      if (idPorta == clausEnviades[i].porta) {
-        var clau = clausEnviades[i].clau;
+    for (var i=0; i<this.clausEnviades.length ; i++) {
+      if (idPorta == this.clausEnviades[i].porta) {
+        var clau = this.clausEnviades[i].clau;
         //Eliminem el parell ja que el retornarem
-        clausEnviades.splice(i, 1);
+        this.clausEnviades.splice(i, 1);
         return clau;
       }
     }
+    console.log('Quan ho retorna?');
     // No s'ha trobat clau per aquesta porta
+    return null;
+  },
+  removeClauPorta: function (idPorta) {
+    //Algorisme per eliminat la clau ja utilitzada. O si es fa alguna altre petició per la clau, també s'ha de borrar.
     return null;
   }
 }

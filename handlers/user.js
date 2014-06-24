@@ -19,6 +19,10 @@ var User = new Schema({
   , ubicacions		: {type : Array , "default" : []}
   , accessos		: {type : Array , "default" : []}	
 });
+var Admin = new Schema({
+    name 			: {type: String, required: true, trim: true , unique: true}
+  , password		: {type: String, required: true}	
+});
 var Grup = new Schema({
     nom 			: {type: String, required: true, trim: true , unique: true}
   , integrants		: {type : Array , "default" : []}
@@ -33,6 +37,7 @@ var Porta = new Schema({
 var User = mongoose.model('User', User, 'users');
 var Grup = mongoose.model('Grup', Grup, 'grups');
 var Porta = mongoose.model('Porta', Porta, 'portes');
+var Admin = mongoose.model('Admin', Admin, 'admin');
 
 exports.list = function(req, res){
 	var user = req.headers.username;

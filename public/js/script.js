@@ -9,7 +9,7 @@
 			// route for the home page
 			.when('/', {
 				templateUrl : 'pages/home.html',
-				controller  : 'mainController'
+				controller  : 'loginController'
 			})
 
 			// route for the about page
@@ -117,7 +117,7 @@
 		$scope.ubicacions = [];
 		$scope.user = $routeParams.username;
 		console.log('param' + $routeParams.username);
-		$http.get('/ubicacions/' + $routeParams.username).success(function (result) {
+		$http.get('/admin/ubicacions/' + $routeParams.username).success(function (result) {
 			console.log('Dins del succes!!!');
 	      	$scope.ubicacions = result;
 	      	console.log($scope.ubicacions);
@@ -132,12 +132,32 @@
 	scotchApp.controller('accessosUsersController', function($scope, $http, $routeParams) {
 		$scope.accessos = [];
 		$scope.user = $routeParams.username;
-		$http.get('/accessos/' + $routeParams.username).success(function (result) {
+		$http.get('/admin/accessos/' + $routeParams.username).success(function (result) {
 			console.log('Dins del succes!!!');
 	      	$scope.accessos = result;
 		  }).error(function (data) {
 		    console.log('-------error------');
 		  });
+
+		
+
+	});
+
+	scotchApp.controller('loginController', function($scope, $http, $routeParams) {
+		$scope.admin = {pass: ''};
+		$scope.submit = function() {
+			console.log($scope.admin.pass);
+			$http.post('/loginAdmin', $scope.admin).success(function (data) {
+				$http.defaults.headers.common.Authorization = data.authorizationToken;
+				console.log('TOKEN--> ' + data.authorizationToken);
+				console.log('Dins del succes!!!');
+		      	$scope.accessos = result;
+			  }).error(function (data) {
+			    console.log('-------error------');
+			  });
+
+		};
+		
 
 		
 
@@ -429,7 +449,7 @@ var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']
 		$routeProvider
 
 			// route for the home page
-			.when('/', {
+			.when('/:idPorta', {
 				templateUrl : 'pages/porta.html',
 				controller  : 'portaController'
 			});
@@ -441,14 +461,15 @@ var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']
 		$scope.message = 'Everyone come and see how good I look!';
 	});
 
-	portesApp.controller('portaController', function($scope, $http) {
+	portesApp.controller('portaController', function($scope, $http, $routeParams) {
 		$scope.string = "";
 		$scope.amagat = true;
+		$scope.nomPorta = $routeParams.idPorta;
 		$scope.getClau = function(){
 			// Aquí es farà la petició de clau al server.
-			$http.get('/clau').success(function (result) {
+			$http.get('/clau/' + $scope.nomPorta).success(function (result) {
 				console.log(result.clau);
-			      	$scope.string = '{"tipus": "nouAcces", "id":"'+result.porta+'", "clau": " '
+			      	$scope.string = '{"tipus": "nouAcces", "id":"'+result.porta+'", "clau": "'
 			      	 + result.clau + '"}';
 			      	$scope.amagat = false;
 				  }).error(function (data) {

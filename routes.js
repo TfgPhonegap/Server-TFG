@@ -40,9 +40,24 @@ var auth = function(req, res, next){
 	}
 	else
 		res.send(401);
-	
-
 };
+var authAdmin = function(req, res, next){
+	var admin = null;
+	if (typeof req.headers.authorization != "undefined") {
+		admin = util.tokenizer.getPayload(req.headers.authorization).admin;
+		console.log(admin + 'Ha de ser true!!!!');
+		if (!admin) {
+			console.log('Admin no autoritzat, enviant 401');
+			res.send(401);
+		}
+		console.log('NEXT');
+		next();
+	}
+	else
+		res.send(401);
+};
+
+
 
 module.exports = function(app) {
 	app.get('/', routes.index);
@@ -54,22 +69,22 @@ module.exports = function(app) {
 		app.delete('/delete/:userName', user.delete);
 	});
 	app.namespace('/ubicacions', function(){
-		app.get('/:userName',  ubicacions.llistaUser);
+		app.get('/:userName',auth,  ubicacions.llistaUser);
 		app.post('/nova/',auth , ubicacions.novaUbicacio);
 	});
 	app.namespace('/accessos', function(){
-		app.get('/:userName' ,  accessos.llista);
-		app.post('/nou', accessos.nouAcces);
+		app.get('/:userName',auth ,  accessos.llista);
+		app.post('/nou',auth , accessos.nouAcces);
 	});
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
-		app.get('/ubicacio/:lloc' , images.ubicacio);
+		app.get('/ubicacio/:lloc', images.ubicacio);
 	});
 	//Aquesta ruta ha de ser perquè la web Angular pugui demanar la clau.
-	app.get('/clau', portes.getClau);
+	app.get('/clau/:idPorta', portes.getClau);
 
 	app.namespace('/grups', function(){
-		app.get('/' ,  grups.llista);
+		app.get('/',  grups.llista);
 		//app.post('/new', user.newUser);
 		//app.delete('/delete/:userName', user.delete);
 	});
@@ -78,15 +93,17 @@ module.exports = function(app) {
 		app.get('/', function(req, res){
 		  res.sendfile('admin.html');
 		});
-		app.get('/users', admin.llistaUsers);
-		app.get('/grups', grups.llista);
-		app.post('/grups/nou', grups.nouGrup);
-		app.get('/portes', portes.llista);
-		app.post('/portes/nova', portes.novaPorta);
-		app.put('/portes/nouGrup', portes.nouAccesGrup);
-		app.delete('/portes/:porta', portes.delete);
-		app.delete('/portes/:porta/grup/:grup', portes.revocarAcces);
-		app.delete('/grups/:grup', grups.delete);
+		app.get('/users', authAdmin, admin.llistaUsers);
+		app.get('ubicacions/:userName', authAdmin, ubicacions.llistaUser);
+		app.get('accessos/:userName', authAdmin, accessos.llista);
+		app.get('/grups', authAdmin, grups.llista);
+		app.post('/grups/nou', authAdmin, grups.nouGrup);
+		app.get('/portes', authAdmin, portes.llista);
+		app.post('/portes/nova', authAdmin, portes.novaPorta);
+		app.put('/portes/nouGrup', authAdmin, portes.nouAccesGrup);
+		app.delete('/portes/:porta', authAdmin, portes.delete);
+		app.delete('/portes/:porta/grup/:grup', authAdmin, portes.revocarAcces);
+		app.delete('/grups/:grup', authAdmin, grups.delete);
 	});
 	
 	app.get('/porta', function(req, res){
@@ -96,8 +113,9 @@ module.exports = function(app) {
 	app.get('/novetats',auth , novetats.llista);
 	// Login/Logout Routes
 	app.post('/login', seguretat.login);
-	app.put('/modificaPassword', seguretat.updatePass);
-	app.put('/modificaEstat', user.modificaEstat);
+	app.post('/loginAdmin', seguretat.loginAdmin);
+	app.put('/modificaPassword',auth, seguretat.updatePass);
+	app.put('/modificaEstat',auth, user.modificaEstat);
 	app.post('/modificaAvatar', user.modificaAvatar);
 	
 

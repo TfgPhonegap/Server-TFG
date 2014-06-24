@@ -10,6 +10,7 @@ var util = require("../util/util");
 
 
 var User = mongoose.model('User', User, 'users');
+var Admin = mongoose.model('Admin', Admin, 'admin');
 
 
 
@@ -41,7 +42,39 @@ exports.login = function(req, res){
 		
 	});
   
-};  
+};
+exports.loginAdmin = function(req, res){
+	var pass = req.param('pass');
+	console.log(pass + 'YAYAYYAYYA');
+	Admin.findOne({name: 'admin'}, function(err, doc){
+		if (err) {
+			res.send(err);
+		}
+		else {
+			if (doc == null) {
+				console.log('no trobat');
+				res.send(req.params.userName + " no és cap user");
+			}
+			else {
+				//if (passwordHash.verify(user.password, doc.password)) {
+					console.log('Enviada '+ pass);
+					console.log('BD '+doc.password);
+				if (pass == doc.password) {
+					console.log('Login Acceptat');
+					res.send({authorizationToken: util.tokenizer.generateToken({admin: true})});
+				}
+				else {
+					console.log('envian un 401 de tornada');
+					res.send(401);
+				}
+
+			}
+		}
+		
+	});
+  
+};
+
 
 exports.updatePass = function(req, res){
 	var user = req.headers.username;
