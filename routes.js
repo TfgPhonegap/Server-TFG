@@ -96,6 +96,9 @@ module.exports = function(app) {
 	app.get('/novetats',auth , novetats.llista);
 	// Login/Logout Routes
 	app.post('/login', seguretat.login);
+	app.put('/modificaPassword', seguretat.updatePass);
+	app.put('/modificaEstat', user.modificaEstat);
+	app.post('/modificaAvatar', user.modificaAvatar);
 	
 
 	

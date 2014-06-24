@@ -3,14 +3,18 @@
  * GET users listing.
  */
 var mongoose = require("mongoose");
+var passwordHash = require('password-hash');
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectID;
+var fsExtra = require('fs-extra');
+var fs = require('fs');
 
 // Esquemes de les diferents coleccions de la bd
 var User = new Schema({
     name 			: {type: String, required: true, trim: true , unique: true}
   , password		: {type: String, required: true}
   , grup 			: {type: String, required: true}
+  , grup 			: {type: String}
   , description     : { type: String, required: true, trim: true }
   , ubicacions		: {type : Array , "default" : []}
   , accessos		: {type : Array , "default" : []}	
@@ -93,14 +97,16 @@ exports.newUser = function(req, res){
 	var descripcio = req.param("description");
 	var grup = req.param("grup");
 	console.log('Grup del nou user' + grup);
+	var newPass =  passwordHash.generate('1234');
+	console.log('hash --> ' + newPass);
 	var user_data = {
 		name: name,
 		description: descripcio,
 		grup: grup,
-		avatar: 'no foto',
+		avatar: 'img/avatars/nou.png',
 		ubicacions: [],
 		accessos: [],
-		password: '1234'
+		password: newPass
 	};
 	var newUser = new User(user_data);
 	newUser.save( function(error, data){
@@ -167,3 +173,72 @@ exports.delete = function(req, res){
 		}
 	});  
 };
+
+exports.modificaEstat = function(req, res){
+	var user = req.headers.username;
+	console.log('USER->   ' + user);
+	var nouEstat = req.param('text');
+		User.findOne({name: user}, function(err, doc){
+			if (err) {
+				res.send(err);
+			}
+			else {
+				if (doc == null) {
+					console.log('no trobat');
+					res.send(req.params.userName + " no és cap user");
+				}
+				else {
+			  			var query = {name: doc.name};
+						var update = {description: nouEstat};
+						var options = {new: true};
+						User.findOneAndUpdate(query, update, options, function(err, user) {
+							if (err)
+								console.log(err);
+							else
+								res.send({resolucio: 'ALLRIGHT!'});
+						});
+						
+
+					
+				}
+			}
+		
+		});
+ 
+};  
+
+exports.modificaAvatar = function(req, res){
+	var username = req.headers.username;
+	var tmpPath = req.files.file.path;
+	var fileName = req.files.file.name;	
+	//var newLocation = __dirname + '/public/';
+	var newLocation = '/home/calldidoctor/tfg/serverAplicacio/data/avatars/' + username;
+	console.log(tmpPath+fileName + newLocation);
+
+	fs.chownSync(tmpPath, 1000, 1000);
+	fs.exists(newLocation, function (exists) {
+		if (exists) {
+			//fs.unlinkSync(newLocation + 'Prova');
+			fs.unlink(newLocation, function (err) {
+			  	if (err) throw err;
+			  	console.log('successfully deleted /tmp/hello');
+			  	var is = fs.createReadStream(tmpPath);
+				var os = fs.createWriteStream(newLocation);
+				is.pipe(os);
+				is.on('end',function() {
+				    fs.unlinkSync(tmpPath);
+				});
+			});
+			
+		}
+		else{
+			console.log('NOOOOOOOOOOOOOO');
+			var is = fs.createReadStream(tmpPath);
+			var os = fs.createWriteStream(newLocation);
+			is.pipe(os);
+			is.on('end',function() {
+			    fs.unlinkSync(tmpPath);
+			});
+		}
+	}); 
+};  

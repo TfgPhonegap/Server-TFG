@@ -3,9 +3,20 @@
  * GET users listing.
  */
 
+ var fs = require('fs');
+
 
 exports.perfil = function(req, res){
-	res.sendfile('data/avatars/' + req.params.userName);
+	console.log(req.params.userName);
+	fs.exists('data/avatars/' + req.params.userName, function (exists) {
+		if (exists) {
+			res.sendfile('data/avatars/' + req.params.userName);
+		}
+		else{
+			res.sendfile('data/avatars/nou.png');
+		}
+	});
+	
   
 };
 
