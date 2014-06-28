@@ -36,7 +36,6 @@ exports.llista = function(req, res){
 };
 
 exports.nouAcces = function(req, res){
-	//Considero que si existeix el token l'usuari i grup existiran. (Pensar si això és veritat o no)
 	var usuari = util.tokenizer.getPayload(req.headers.authorization).username;
 	var grup = util.tokenizer.getPayload(req.headers.authorization).grup;
 	var nouLloc = req.param("idPorta");
@@ -45,11 +44,8 @@ exports.nouAcces = function(req, res){
 	var idPorta = {id: req.param("idPorta")};
 	var userAdmes = false;
 	var clauRebuda = new String(req.param("clau"));
-	//Hi haurà d'haver un if que englobi tot el que ve després, només hi entri si
-	// la pass que envia l'user existeix dins de util.passwrods (no és aquest nom exacte)
 	//Busquem clau a la memoria del server
 	var clauMemoria = new String(util.porta.getClauPorta(nouLloc));
-	console.log('Ultima prova ja --> ' + clauRebuda.localeCompare(clauMemoria));
 	if (clauRebuda.localeCompare(clauMemoria) == 0){
 		Porta.findOne(idPorta, function(err, doc){
 			if (err) {
@@ -98,7 +94,7 @@ exports.nouAcces = function(req, res){
 							  			var query = {nom: userFinal.grup};
 										var update = {novetats: grup.novetats};
 										var options = {new: true};
-										// Mirar com arreclar això. No pot ser fer el mètode i res a dins...
+										
 										Grup.findOneAndUpdate(query, update, options, function(err, grup2) {
 										});
 								  	});
@@ -107,13 +103,10 @@ exports.nouAcces = function(req, res){
 						}
 					});
 					if (userAdmes) {
-						//Afegir accès i contestar amb un acces permès.
-						console.log('Lusuari està acceptat per entrar');
-						res.send({resolucioAcces: 'Tens accés :)'});
+						res.send({resolucioAcces: 'Pots passar.'});
 					}
 					else {
-						console.log('Lusuari no pot entrar......');
-						res.send({resolucioAcces: 'No acces dude :('});
+						res.send({resolucioAcces: 'Accés denegat!'});
 					}
 
 				}
@@ -122,7 +115,6 @@ exports.nouAcces = function(req, res){
 		});
 	}
 	else {
-		console.log('Enviem resolucioAcces');
 		res.send({resolucioAcces: '¡Clau no vàlida!'});
 	}
 

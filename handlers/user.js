@@ -48,26 +48,6 @@ exports.list = function(req, res){
 	var resultat = [];
 	User.find(function(err, doc){
 		usuaris = doc;
-/*		for (var i=0; i<usuaris.length; i++) {
-			if (user == usuaris[i].name)
-				grup = usuaris[i].grup;
-			else {
-				if (usuaris[i].grup=='bons') {
-					bons.push(usuaris[i]);
-				}
-				else {
-					dolents.push(usuaris[i]);
-				}
-			}
-		}	
-		// Mirar de fer-ho dinàmic. Si es crea un grup nou que passa?
-		if (grup == 'bons') {
-			res.send(bons);
-		}
-		else {
-			res.send(dolents);
-		}*/
-
 
 		for (var i=0; i<usuaris.length; i++) {
 			if (user == usuaris[i].name) {
@@ -123,7 +103,6 @@ exports.newUser = function(req, res){
 		  		if (err) 
 		  			console.log(err);
 		  		else {
-		  			console.log(doc);
 		  			doc.integrants.unshift(newUser.name);
 		  			var query = {nom: newUser.grup};
 					var update = {integrants: doc.integrants};
@@ -151,7 +130,6 @@ exports.delete = function(req, res){
 				  		if (err) 
 				  			console.log(err);
 				  		else {
-				  			console.log('Nom user ' + doc.name);
 				  			for (var i=0; i<grup.integrants.length; i++) {
 				  				if (grup.integrants[i] == doc.name) {
 				  					grup.integrants.splice (i, 1);
@@ -181,7 +159,6 @@ exports.delete = function(req, res){
 
 exports.modificaEstat = function(req, res){
 	var user = req.headers.username;
-	console.log('USER->   ' + user);
 	var nouEstat = req.param('text');
 		User.findOne({name: user}, function(err, doc){
 			if (err) {
@@ -200,7 +177,7 @@ exports.modificaEstat = function(req, res){
 							if (err)
 								console.log(err);
 							else
-								res.send({resolucio: 'ALLRIGHT!'});
+								res.send({resolucio: 'Estat modificat correctament.'});
 						});
 						
 
@@ -215,8 +192,7 @@ exports.modificaEstat = function(req, res){
 exports.modificaAvatar = function(req, res){
 	var username = req.headers.username;
 	var tmpPath = req.files.file.path;
-	var fileName = req.files.file.name;	
-	//var newLocation = __dirname + '/public/';
+	var fileName = req.files.file.name;
 	var newLocation = '/home/calldidoctor/tfg/serverAplicacio/data/avatars/' + username;
 	console.log(tmpPath+fileName + newLocation);
 
@@ -226,7 +202,6 @@ exports.modificaAvatar = function(req, res){
 			//fs.unlinkSync(newLocation + 'Prova');
 			fs.unlink(newLocation, function (err) {
 			  	if (err) throw err;
-			  	console.log('successfully deleted /tmp/hello');
 			  	var is = fs.createReadStream(tmpPath);
 				var os = fs.createWriteStream(newLocation);
 				is.pipe(os);
@@ -237,7 +212,6 @@ exports.modificaAvatar = function(req, res){
 			
 		}
 		else{
-			console.log('NOOOOOOOOOOOOOO');
 			var is = fs.createReadStream(tmpPath);
 			var os = fs.createWriteStream(newLocation);
 			is.pipe(os);

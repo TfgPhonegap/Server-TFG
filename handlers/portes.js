@@ -18,26 +18,18 @@ var Grup = mongoose.model('Grup', Grup, 'grups');
 
 exports.vistaPorta = function(req, res){
 	var idPorta = req.params.idPorta;
-	//res.render('clauQR', { idPorta: idPorta });
 	res.sendfile('portes.html');
   
 };
 
 exports.getClau = function(req, res){
-	//De moment retornarem el mateix per totes les portes, però realment s'haurà de mirar qui fa la petició
-	// (token), i enviar una contrassenya específica per ella.
-	// També cladrà comprovar que la porta existeixi realment.
-	// Que l'Id porta no sigui per paràmetre, sino pel token de login.
 	var idPorta = req.params.idPorta;
 	console.log('id Porta --> ' + idPorta);
-	//res.render('clauQR', { idPorta: idPorta });
-	//Aquesta OTP s'ha de crear cada vegada que algú ve a aquesta ruta. (Random, hash, etc...)
 	var data = new Date();
 	var moment = data.toString();
-	console.log(moment);
+	// Es crea la pass d'un sol ús.
 	var OTP = hash.generate(moment);
 	util.porta.setClau(idPorta, OTP);
-	console.log('Enviant clau --> ' + OTP);
 	res.send({porta: idPorta, clau: OTP});
 };
 

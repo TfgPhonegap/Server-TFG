@@ -13,18 +13,10 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectID
 
-//var namespace = require('express-namespace');
 
-// Funció que servirà per preguntar si l'usuari està logejat o no
-// Comprovar si ve token, si no ve tornar 401.
-// Fer-ho a totes les rutes menys la del login.
-
-
-// No es el que vull fer pero crec k shaura de fer...
 var User = mongoose.model('User', User, 'users');
 
-// Mirar perquè si externelitzo el findOne ho fa després de retornar un 401.
-// Jo ho vull posar tot al Util!
+// Funcions per bloquejar usuaris no autenticats
 var auth = function(req, res, next){
 	var user = null;
 	if (typeof req.headers.authorization != "undefined") {
@@ -58,10 +50,9 @@ var authAdmin = function(req, res, next){
 };
 
 
-
+// Rutes disponibles del servidor
 module.exports = function(app) {
 	app.get('/', routes.index);
-	// Aquestes rutes només han de poder ser accedides per un admin.
 	app.namespace('/users', function(){
 		app.get('/',auth ,  user.list);
 		app.get('/:userName',auth ,  user.userDetails);
@@ -79,14 +70,12 @@ module.exports = function(app) {
 	app.namespace('/images', function(){
 		app.get('/avatar/:userName', images.perfil);
 		app.get('/ubicacio/:lloc', images.ubicacio);
+		app.get('/accessos/:id', images.acces);
 	});
-	//Aquesta ruta ha de ser perquè la web Angular pugui demanar la clau.
 	app.get('/clau/:idPorta', portes.getClau);
 
 	app.namespace('/grups', function(){
 		app.get('/',  grups.llista);
-		//app.post('/new', user.newUser);
-		//app.delete('/delete/:userName', user.delete);
 	});
 
 	app.namespace('/admin', function(){

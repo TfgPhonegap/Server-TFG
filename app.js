@@ -50,32 +50,7 @@ app.configure('development', function(){
 mongoose.connect('mongodb://localhost/tfg');
 routes = require('./routes')(app, passport);
 
-// Proves socket.io
-app.get('/hola', function(req, res){
-  res.sendfile('prova.html');
-});
-
-
-
-
-
-
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
-
-io.on('connection', function(socket){
-  console.log('Algu conectat');
-   socket.on('BotoApretat', function(msg){
-    console.log('Putu amu, has apretat un botó');
-  });
-  
-   
-});
-
- io.on('PortesJS', function(){
-    console.log('Event rebut desde protes js (Ja ho tinc :))))9');
-  });
-
 
 server.listen(app.get('port'), '0.0.0.0', function(){
   console.log("Express server listening on port " + app.get('port'));

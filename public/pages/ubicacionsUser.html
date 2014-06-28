@@ -6,15 +6,13 @@
 	        	<th>Dia</th>
 	        	<th>hora</th>
 	            <th>Lloc</th>
-	            <th>Comentari</th>
 	        </tr>
 	    </thead>
 	    <tbody ng-repeat="dia in ubicacions" >	       
 	        <tr ng-repeat="ubicacio in dia.ubicacionsDia">
 	        	<td class="text-left">{{dia.data}}</td>
 	        	<td class="text-left">{{ubicacio.hora}}</td>
-		        <td class="text-left">{{ubicacio.lloc}}</td>
-		        <td class="text-left">{{ubicacio.comentari}}</td>	        
+		        <td class="text-left">{{ubicacio.lloc}}</td>        
 	        </tr>
 	    </tbody>
 	</table>

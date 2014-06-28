@@ -34,9 +34,7 @@ exports.llistaUser = function(req, res){
 };
 
 exports.novaUbicacio = function(req, res){
-	//Arreclar això, s'estan fen 2 accessos a BD quan crec que es podria fer amb un.
 	var nouLloc = req.param("lloc");
-	var nouComentari = req.param("comentari");
 	var novaData = req.param("data");
 	var novaHora = req.param("hora");
 	var usuari = req.headers.username;
@@ -61,18 +59,15 @@ exports.novaUbicacio = function(req, res){
 						break;
 					}
 				}
-				// Testejar això perquè pot ser que falli.(He unit el codi repetit que hi havia.)
 				var query = {name: usuari};
 				var update = {ubicacions: doc.ubicacions};
 				var options = {new: true};
 				if (dataTrobada) {
-					doc.ubicacions[i].ubicacionsDia.unshift({comentari: nouComentari,
-			                  lloc: nouLloc,
+					doc.ubicacions[i].ubicacionsDia.unshift({lloc: nouLloc,
 			                  hora: novaHora});
 				}
 				else {
-					doc.ubicacions.unshift({data: novaData, ubicacionsDia: [{comentari: nouComentari,
-			                  lloc: nouLloc,
+					doc.ubicacions.unshift({data: novaData, ubicacionsDia: [{lloc: nouLloc,
 			                  hora: novaHora}]});
 				}
 				User.findOneAndUpdate(query, update, options, function(err, user) {

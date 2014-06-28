@@ -1,9 +1,9 @@
-// create the module and name it scotchApp
+// create the module and name it adminApp
         // also include ngRoute for all our routing needs
-	var scotchApp = angular.module('scotchApp', ['ngRoute', 'ui.bootstrap']);
+	var adminApp = angular.module('adminApp', ['ngRoute', 'ui.bootstrap']);
 
 	// configure our routes
-	scotchApp.config(function($routeProvider) {
+	adminApp.config(function($routeProvider) {
 		$routeProvider
 
 			// route for the home page
@@ -49,22 +49,11 @@
 				controller  : 'contactController'
 			});
 	});
+	adminApp.controller('mainController', function($scope, $http, $modal, $location) {
 
-	// create the controller and inject Angular's $scope
-	scotchApp.controller('mainController', function($scope) {
-		// create a message to display in our view
-		$scope.message = 'Everyone come and see how good I look!';
 	});
 
-	scotchApp.controller('aboutController', function($scope) {
-		$scope.message = 'Look! I am an about page.';
-	});
-
-	scotchApp.controller('contactController', function($scope) {
-		$scope.message = 'Contact us! JK. This is just a demo.';
-	});
-
-	scotchApp.controller('usersController', function($scope, $http, $modal, $location) {
+	adminApp.controller('usersController', function($scope, $http, $modal, $location) {
 		$scope.users = [];
 		$http.get('/admin/users').success(function (result) {
 			console.log('Dins del succes!!!');
@@ -78,7 +67,6 @@
 				console.log(res);
 				// Actualitzem la llista de users.
 				$http.get('/admin/users').success(function (result) {
-					console.log('Dins del succes!!!');
 			      	$scope.users = result;
 				  }).error(function (data) {
 				    console.log('-------error------');
@@ -86,16 +74,12 @@
 			});
 		};
 		$scope.addUser = function(){
-			console.log('Click add user!!!');
-
-			// El modal no apareix, es queda la pantalla negra.
 		    var modalInstance = $modal.open({
 		      templateUrl: 'myModalContent.html',
 		      controller: 'modelInstanceController',
 		      resolve: {
 		        actualitzarLlista: function () {
 		        	$http.get('/admin/users').success(function (result) {
-						console.log('Actualitzant llista');
 				      	$scope.users = result;
 					  }).error(function (data) {
 					    console.log('-------error------');
@@ -113,7 +97,7 @@
 		
 
 	});
-	scotchApp.controller('ubicacionsUsersController', function($scope, $http, $routeParams) {
+	adminApp.controller('ubicacionsUsersController', function($scope, $http, $routeParams) {
 		$scope.ubicacions = [];
 		$scope.user = $routeParams.username;
 		console.log('param' + $routeParams.username);
@@ -129,7 +113,7 @@
 
 	});
 
-	scotchApp.controller('accessosUsersController', function($scope, $http, $routeParams) {
+	adminApp.controller('accessosUsersController', function($scope, $http, $routeParams) {
 		$scope.accessos = [];
 		$scope.user = $routeParams.username;
 		$http.get('/admin/accessos/' + $routeParams.username).success(function (result) {
@@ -143,15 +127,13 @@
 
 	});
 
-	scotchApp.controller('loginController', function($scope, $http, $routeParams) {
+	adminApp.controller('loginController', function($scope, $http, $location) {
 		$scope.admin = {pass: ''};
 		$scope.submit = function() {
 			console.log($scope.admin.pass);
 			$http.post('/loginAdmin', $scope.admin).success(function (data) {
 				$http.defaults.headers.common.Authorization = data.authorizationToken;
-				console.log('TOKEN--> ' + data.authorizationToken);
-				console.log('Dins del succes!!!');
-		      	$scope.accessos = result;
+				$location.path( '/users' );
 			  }).error(function (data) {
 			    console.log('-------error------');
 			  });
@@ -164,7 +146,7 @@
 	});
 
 
-	scotchApp.controller('grupsController', function($scope, $http, $modal) {
+	adminApp.controller('grupsController', function($scope, $http, $modal) {
 		$scope.grups = [];
 		$http.get('/admin/grups').success(function (result) {
 	      	$scope.grups = result;
@@ -172,32 +154,25 @@
 		    console.log('-------error------');
 		  });
 		$scope.removeGrup = function(grup){
-			console.log('Remove grup --> ' + grup);
 			$http.delete('/admin/grups/' + grup).success(function (res){
-				console.log(res);
 				if (res =='error') {
 					alert("El nombre d'integrants ha de ser 0");
 				}
 				// Actualitzem la llista de users.
 				$http.get('/admin/grups').success(function (result) {
-					//console.log(result);
 			      	$scope.grups = result;
 				  }).error(function (data) {
 				    console.log('-------error------');
 				  });
 			});
 		};
-		$scope.addGrup = function(){
-			console.log('Click add user!!!');
-
-			
+		$scope.addGrup = function(){			
 		    var modalInstance = $modal.open({
 		      templateUrl: 'modalNewGrupContent.html',
 		      controller: 'modelInstanceController',
 		      resolve: {
 		        actualitzarLlista: function () {
 		        	$http.get('/admin/users').success(function (result) {
-						console.log('Actualitzant llista');
 				      	$scope.users = result;
 					  }).error(function (data) {
 					    console.log('-------error------');
@@ -206,13 +181,12 @@
 		        }
 		      }
 		    });
-		    console.log('Quan surt això?');
 		};
 		
 
 	});
 
-	scotchApp.controller('portesController', function($scope, $http, $modal) {
+	adminApp.controller('portesController', function($scope, $http, $modal) {
 		$scope.portes = [];
 		$http.get('/admin/portes').success(function (result) {
 	      	$scope.portes = result;
@@ -221,7 +195,6 @@
 		  });
 		$scope.removePorta = function(porta){
 			$http.delete('/admin/portes/' + porta).success(function (res){
-				console.log(res);
 				if (res =='error') {
 					alert("Per a eliminar una porta no hi pot haver cap grup admés");
 				}
@@ -238,7 +211,6 @@
 		$scope.revocarAcces = function(grup, porta){
 			console.log(grup+porta);
 			$http.delete('/admin/portes/' + porta + '/grup/' + grup).success(function (res){
-				console.log(res);
 				if (res =='error') {
 					alert("Per a eliminar una porta no hi pot haver cap grup admés");
 				}
@@ -253,17 +225,13 @@
 			});
 		};
 
-		$scope.addPorta = function(){
-			console.log('Click add user!!!');
-
-			
+		$scope.addPorta = function(){			
 		    var modalInstance = $modal.open({
 		      templateUrl: 'modalNewGrupContent.html',
 		      controller: 'modelInstanceController',
 		      resolve: {
 		        actualitzarLlista: function () {
 		        	$http.get('/admin/users').success(function (result) {
-						console.log('Actualitzant llista');
 				      	$scope.users = result;
 					  }).error(function (data) {
 					    console.log('-------error------');
@@ -274,10 +242,7 @@
 		    });
 		};
 
-		$scope.permetreAccesGrup = function(porta){
-			console.log('Click add user!!!');
-
-			
+		$scope.permetreAccesGrup = function(porta){			
 		    var modalInstance = $modal.open({
 		      templateUrl: 'modalPermetreNouGrup.html',
 		      controller: 'modelInstanceNouGrupPortaController',
@@ -292,7 +257,7 @@
 
 	});
 
-	scotchApp.controller('modelInstanceController', function($scope, $http, $modalInstance) {
+	adminApp.controller('modelInstanceController', function($scope, $http, $modalInstance) {
 		$scope.items = {};
 		$scope.portes = {id: 'isi', checked: false};
 		$http.get('/grups').success(function (result) {
@@ -303,7 +268,6 @@
 				  });
 		$http.get('/admin/portes').success(function (result) {
 				$scope.portes = result;
-				console.log(result);
 				return;
 				  }).error(function (data) {
 				    console.log('-------error------');
@@ -320,7 +284,6 @@
 				$scope.errorMessage = 'Tots els camps són obligatoris';
 			else {
 			    $http.post('/users/new', data).success(function (result) {
-			    	console.log(result);
 			    	if (result=='ok'){
 			    		alert('Usuari creat correctament');	
 			    		$modalInstance.close($scope.selected.item);
@@ -346,7 +309,6 @@
 			data.portesAccessibles = portesMarcades;
 			//Falta comprovacions als inputs.
 			 $http.post('/admin/grups/nou', data).success(function (result) {
-			    	console.log(result);
 			    	if (result=='ok'){
 			    		alert('Grup creat correctament');	
 			    		$modalInstance.close($scope.selected.item);
@@ -365,7 +327,6 @@
 				$scope.errorMessage = 'Tots els camps són obligatoris';
 			else {
 			    $http.post('/admin/portes/nova', data).success(function (result) {
-			    	console.log(result);
 			    	if (result=='ok'){
 			    		alert('Porta creada correctament');	
 			    		$modalInstance.close($scope.selected.item);
@@ -384,7 +345,7 @@
 		};
 	});
 
-	scotchApp.controller('modelInstanceNouGrupPortaController', function($scope, $http, $modalInstance, idPorta) {
+	adminApp.controller('modelInstanceNouGrupPortaController', function($scope, $http, $modalInstance, idPorta) {
 		$scope.items = {checked: false};
 		$scope.grup = {id: 'isi', checked: false};
 		$scope.portaPermetreNouAcces = idPorta;
@@ -396,7 +357,6 @@
 				  });
 		$http.get('/admin/portes').success(function (result) {
 				$scope.portes = result;
-				console.log(result);
 				return;
 				  }).error(function (data) {
 				    console.log('-------error------');
@@ -419,7 +379,6 @@
 				data.porta = $scope.portaPermetreNouAcces;
 				data.nousGrups = grupsMarcats;
 			   	$http.put('/admin/portes/nouGrup', data).success(function (result) {
-			    	console.log(result);
 			    	if (result=='ok'){
 			    		alert('Grup afegit correctament');	
 			    		$modalInstance.close();
@@ -454,11 +413,8 @@ var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']
 				controller  : 'portaController'
 			});
 	});
+	portesApp.controller('mainController', function($scope, $http, $modal, $location) {
 
-	// create the controller and inject Angular's $scope
-	portesApp.controller('mainController', function($scope) {
-		// create a message to display in our view
-		$scope.message = 'Everyone come and see how good I look!';
 	});
 
 	portesApp.controller('portaController', function($scope, $http, $routeParams) {
@@ -468,7 +424,6 @@ var portesApp = angular.module('portesApp', ['ngRoute', 'ui.bootstrap', 'ja.qr']
 		$scope.getClau = function(){
 			// Aquí es farà la petició de clau al server.
 			$http.get('/clau/' + $scope.nomPorta).success(function (result) {
-				console.log(result.clau);
 			      	$scope.string = '{"tipus": "nouAcces", "id":"'+result.porta+'", "clau": "'
 			      	 + result.clau + '"}';
 			      	$scope.amagat = false;

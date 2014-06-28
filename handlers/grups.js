@@ -22,7 +22,6 @@ exports.llista = function(req, res){
 		for (var i=0; i<doc.length; i++){
 			grups.push({name: doc[i].nom, mida: doc[i].integrants.length});
 		}
-		console.log(grups);
 		res.send(grups);
 	});
 };
@@ -46,7 +45,6 @@ exports.delete = function(req, res){
 						  			var query = {id: porta.id};
 									var update = {grupsAdmesos: porta.grupsAdmesos};
 									var options = {new: true};
-									console.log('Apunt de fer lupdate de ' + update);
 									Porta.findOneAndUpdate(query, update, options, function(err, user) {
 										if (err)
 											console.log(err);
@@ -67,7 +65,6 @@ exports.delete = function(req, res){
 			});  
 		}
 	});
-	console.log('Això no es pot veure mai :(((((');
 };
 
 
@@ -85,13 +82,11 @@ exports.nouGrup = function(req, res){
 	        res.json(error);
 	    }
 	    else{
-	    	console.log(portesAccessibles);
 	    	for (var i=0; i<portesAccessibles.length; i++) {
 	    		Porta.findOne({id: portesAccessibles[i]}, function(err, doc){
 			  		if (err) 
 			  			console.log(err);
 			  		else {
-			  			console.log(grup_data)
 			  			doc.grupsAdmesos.unshift(grup_data.nom);
 			  			var query = {id: doc.id};
 						var update = {grupsAdmesos: doc.grupsAdmesos};

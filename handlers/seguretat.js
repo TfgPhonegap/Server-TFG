@@ -45,7 +45,6 @@ exports.login = function(req, res){
 };
 exports.loginAdmin = function(req, res){
 	var pass = req.param('pass');
-	console.log(pass + 'YAYAYYAYYA');
 	Admin.findOne({name: 'admin'}, function(err, doc){
 		if (err) {
 			res.send(err);
@@ -78,7 +77,6 @@ exports.loginAdmin = function(req, res){
 
 exports.updatePass = function(req, res){
 	var user = req.headers.username;
-	console.log('USREEEE->   ' + user);
 	var antiga = req.param('old');
 	var nova1 = req.param('new1');
 	var nova2 = req.param('new2');
@@ -102,7 +100,7 @@ exports.updatePass = function(req, res){
 						if (err)
 							console.log(err);
 						else
-							res.send({resolucio: 'ALLRIGHT!'});
+							res.send({resolucio: 'Contrasenya modificada correctament.'});
 					});
 					
 				}
