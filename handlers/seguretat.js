@@ -55,7 +55,6 @@ exports.loginAdmin = function(req, res){
 				res.send(req.params.userName + " no és cap user");
 			}
 			else {
-				//if (passwordHash.verify(user.password, doc.password)) {
 					console.log('Enviada '+ pass);
 					console.log('BD '+doc.password);
 				if (pass == doc.password) {

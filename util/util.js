@@ -49,12 +49,7 @@ exports.porta = {
         return clau;
       }
     }
-    console.log('Quan ho retorna?');
     // No s'ha trobat clau per aquesta porta
-    return null;
-  },
-  removeClauPorta: function (idPorta) {
-    //Algorisme per eliminat la clau ja utilitzada. O si es fa alguna altre petició per la clau, també s'ha de borrar.
     return null;
   }
 }
